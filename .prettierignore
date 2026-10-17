@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+.research
+.qa
+package-lock.json
+public/*.svg
+src/content/upstream-commands.md
+scripts/Manrope-OFL.txt
+AGENTS.md
+next-env.d.ts

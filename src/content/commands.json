@@ -1,0 +1,4268 @@
+[
+  {
+    "name": "SET",
+    "syntax": "SET key value [EX seconds|PX milliseconds|EXAT timestamp|PXAT milliseconds-timestamp|KEEPTTL] [NX|XX] [GET] [TAGS tag ...]",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GET",
+    "syntax": "GET key",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DEL",
+    "syntax": "DEL key [key ...]",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "EXISTS",
+    "syntax": "EXISTS key [key ...]",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "EXPIRE",
+    "syntax": "EXPIRE key seconds [NX|XX|GT|LT]",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "TTL",
+    "syntax": "TTL key",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PERSIST",
+    "syntax": "PERSIST key",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "INCR",
+    "syntax": "INCR key",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DECR",
+    "syntax": "DECR key",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "INCRBY",
+    "syntax": "INCRBY key increment",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DECRBY",
+    "syntax": "DECRBY key decrement",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "APPEND",
+    "syntax": "APPEND key value",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GETRANGE",
+    "syntax": "GETRANGE key start end",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SETRANGE",
+    "syntax": "SETRANGE key offset value",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "STRLEN",
+    "syntax": "STRLEN key",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MSET",
+    "syntax": "MSET key value [key value ...]",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MGET",
+    "syntax": "MGET key [key ...]",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SETNX",
+    "syntax": "SETNX key value",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SETEX",
+    "syntax": "SETEX key seconds value",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PSETEX",
+    "syntax": "PSETEX key milliseconds value",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GETSET",
+    "syntax": "GETSET key value",
+    "category": "String Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HSET",
+    "syntax": "HSET key field value [field value ...]",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HGET",
+    "syntax": "HGET key field",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HMSET",
+    "syntax": "HMSET key field value [field value ...]",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HMGET",
+    "syntax": "HMGET key field [field ...]",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HGETALL",
+    "syntax": "HGETALL key",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HDEL",
+    "syntax": "HDEL key field [field ...]",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HEXISTS",
+    "syntax": "HEXISTS key field",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HLEN",
+    "syntax": "HLEN key",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HKEYS",
+    "syntax": "HKEYS key",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HVALS",
+    "syntax": "HVALS key",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HINCRBY",
+    "syntax": "HINCRBY key field increment",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HINCRBYFLOAT",
+    "syntax": "HINCRBYFLOAT key field increment",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HSETNX",
+    "syntax": "HSETNX key field value",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HSTRLEN",
+    "syntax": "HSTRLEN key field",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "HRANDFIELD",
+    "syntax": "HRANDFIELD key [count [WITHVALUES]]",
+    "category": "Hash Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LPUSH",
+    "syntax": "LPUSH key element [element ...]",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "RPUSH",
+    "syntax": "RPUSH key element [element ...]",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LPOP",
+    "syntax": "LPOP key [count]",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "RPOP",
+    "syntax": "RPOP key [count]",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LLEN",
+    "syntax": "LLEN key",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LRANGE",
+    "syntax": "LRANGE key start stop",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LINDEX",
+    "syntax": "LINDEX key index",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LSET",
+    "syntax": "LSET key index element",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LREM",
+    "syntax": "LREM key count element",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LTRIM",
+    "syntax": "LTRIM key start stop",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LINSERT",
+    "syntax": "LINSERT key BEFORE|AFTER pivot element",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BLPOP",
+    "syntax": "BLPOP key [key ...] timeout",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BRPOP",
+    "syntax": "BRPOP key [key ...] timeout",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "RPOPLPUSH",
+    "syntax": "RPOPLPUSH source destination",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BRPOPLPUSH",
+    "syntax": "BRPOPLPUSH source destination timeout",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LMOVE",
+    "syntax": "LMOVE source destination LEFT|RIGHT LEFT|RIGHT",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BLMOVE",
+    "syntax": "BLMOVE source destination LEFT|RIGHT LEFT|RIGHT timeout",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LPOS",
+    "syntax": "LPOS key element [RANK rank] [COUNT num-matches] [MAXLEN len]",
+    "category": "List Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SADD",
+    "syntax": "SADD key member [member ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SREM",
+    "syntax": "SREM key member [member ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SMEMBERS",
+    "syntax": "SMEMBERS key",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SISMEMBER",
+    "syntax": "SISMEMBER key member",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SCARD",
+    "syntax": "SCARD key",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SPOP",
+    "syntax": "SPOP key [count]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SRANDMEMBER",
+    "syntax": "SRANDMEMBER key [count]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SINTER",
+    "syntax": "SINTER key [key ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SINTERSTORE",
+    "syntax": "SINTERSTORE destination key [key ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SUNION",
+    "syntax": "SUNION key [key ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SUNIONSTORE",
+    "syntax": "SUNIONSTORE destination key [key ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SDIFF",
+    "syntax": "SDIFF key [key ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SDIFFSTORE",
+    "syntax": "SDIFFSTORE destination key [key ...]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SMOVE",
+    "syntax": "SMOVE source destination member",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SSCAN",
+    "syntax": "SSCAN key cursor [MATCH pattern] [COUNT count]",
+    "category": "Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZADD",
+    "syntax": "ZADD key [NX|XX] [GT|LT] [CH] [INCR] score member [score member ...]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREM",
+    "syntax": "ZREM key member [member ...]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZSCORE",
+    "syntax": "ZSCORE key member",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZINCRBY",
+    "syntax": "ZINCRBY key increment member",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZCARD",
+    "syntax": "ZCARD key",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZRANGE",
+    "syntax": "ZRANGE key start stop [WITHSCORES] [BYSCORE|BYLEX] [REV] [LIMIT offset count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREVRANGE",
+    "syntax": "ZREVRANGE key start stop [WITHSCORES]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZRANGEBYSCORE",
+    "syntax": "ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREVRANGEBYSCORE",
+    "syntax": "ZREVRANGEBYSCORE key max min [WITHSCORES] [LIMIT offset count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZRANGEBYLEX",
+    "syntax": "ZRANGEBYLEX key min max [LIMIT offset count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREVRANGEBYLEX",
+    "syntax": "ZREVRANGEBYLEX key max min [LIMIT offset count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZCOUNT",
+    "syntax": "ZCOUNT key min max",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZLEXCOUNT",
+    "syntax": "ZLEXCOUNT key min max",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREMZRANGEBYRANK",
+    "syntax": "ZREMZRANGEBYRANK key start stop",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREMRANGEBYSCORE",
+    "syntax": "ZREMRANGEBYSCORE key min max",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREMRANGEBYLEX",
+    "syntax": "ZREMRANGEBYLEX key min max",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZPOPMIN",
+    "syntax": "ZPOPMIN key [count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZPOPMAX",
+    "syntax": "ZPOPMAX key [count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BZPOPMIN",
+    "syntax": "BZPOPMIN key [key ...] timeout",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BZPOPMAX",
+    "syntax": "BZPOPMAX key [key ...] timeout",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZMPOP",
+    "syntax": "ZMPOP numkeys key [key ...] MIN|MAX [COUNT count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZMSCORE",
+    "syntax": "ZMSCORE key member [member ...]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZRANK",
+    "syntax": "ZRANK key member [WITHSCORE]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZREVRANK",
+    "syntax": "ZREVRANK key member [WITHSCORE]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZDIFF",
+    "syntax": "ZDIFF numkeys key [key ...] [WITHSCORES]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZDIFFSTORE",
+    "syntax": "ZDIFFSTORE destination numkeys key [key ...]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZINTER",
+    "syntax": "ZINTER numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX] [WITHSCORES]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZINTERSTORE",
+    "syntax": "ZINTERSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZUNION",
+    "syntax": "ZUNION numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX] [WITHSCORES]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZUNIONSTORE",
+    "syntax": "ZUNIONSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZRANDMEMBER",
+    "syntax": "ZRANDMEMBER key [count [WITHSCORES]]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ZSCAN",
+    "syntax": "ZSCAN key cursor [MATCH pattern] [COUNT count]",
+    "category": "Sorted Set Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SETBIT",
+    "syntax": "SETBIT key offset value",
+    "category": "Bitmap Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GETBIT",
+    "syntax": "GETBIT key offset",
+    "category": "Bitmap Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BITCOUNT",
+    "syntax": "BITCOUNT key [start end [BYTE|BIT]]",
+    "category": "Bitmap Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BITPOS",
+    "syntax": "BITPOS key bit [start [end [BYTE|BIT]]]",
+    "category": "Bitmap Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BITOP",
+    "syntax": "BITOP operation destkey key [key ...]",
+    "category": "Bitmap Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BITFIELD",
+    "syntax": "BITFIELD key [GET type offset] [SET type offset value] [INCRBY type offset increment] [OVERFLOW WRAP|SAT|FAIL]",
+    "category": "Bitmap Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BITFIELD_RO",
+    "syntax": "BITFIELD_RO key [GET type offset]",
+    "category": "Bitmap Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PFADD",
+    "syntax": "PFADD key element [element ...]",
+    "category": "HyperLogLog Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PFCOUNT",
+    "syntax": "PFCOUNT key [key ...]",
+    "category": "HyperLogLog Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PFMERGE",
+    "syntax": "PFMERGE destkey sourcekey [sourcekey ...]",
+    "category": "HyperLogLog Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PFDEBUG",
+    "syntax": "PFDEBUG subcommand key",
+    "category": "HyperLogLog Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PFSELFTEST",
+    "syntax": "PFSELFTEST",
+    "category": "HyperLogLog Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEOADD",
+    "syntax": "GEOADD key [NX|XX] [CH] longitude latitude member [longitude latitude member ...]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEODIST",
+    "syntax": "GEODIST key member1 member2 [M|KM|FT|MI]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEOHASH",
+    "syntax": "GEOHASH key member [member ...]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEOPOS",
+    "syntax": "GEOPOS key member [member ...]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEORADIUS",
+    "syntax": "GEORADIUS key longitude latitude radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key] [STOREDIST key]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEORADIUSBYMEMBER",
+    "syntax": "GEORADIUSBYMEMBER key member radius M|KM|FT|MI [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC|DESC] [STORE key] [STOREDIST key]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEOSEARCH",
+    "syntax": "GEOSEARCH key [FROMMEMBER m] [FROMLONLAT lon lat] [BYRADIUS rad M|KM|FT|MI] [BYBOX w h M|KM|FT|MI] [ASC|DESC] [COUNT count [ANY]] [WITHCOORD] [WITHDIST] [WITHHASH]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "GEOSEARCHSTORE",
+    "syntax": "GEOSEARCHSTORE destination source [FROMMEMBER m] [FROMLONLAT lon lat] [BYRADIUS rad M|KM|FT|MI] [BYBOX w h M|KM|FT|MI] [ASC|DESC] [COUNT count [ANY]] [STOREDIST]",
+    "category": "Geo Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XADD",
+    "syntax": "XADD key [NOMKSTREAM] [MAXLEN|MINID [=|~] threshold [LIMIT count]] id field value [field value ...]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XDEL",
+    "syntax": "XDEL key id [id ...]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XLEN",
+    "syntax": "XLEN key",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XRANGE",
+    "syntax": "XRANGE key start end [COUNT count]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XREVRANGE",
+    "syntax": "XREVRANGE key end start [COUNT count]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XREAD",
+    "syntax": "XREAD [COUNT count] [BLOCK milliseconds] STREAMS key [key ...] id [id ...]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XGROUP",
+    "syntax": "XGROUP CREATE key group id|$ [MKSTREAM]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XGROUP",
+    "syntax": "XGROUP CREATECONSUMER key group consumer",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XGROUP",
+    "syntax": "XGROUP DELCONSUMER key group consumer",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XGROUP",
+    "syntax": "XGROUP DESTROY key group",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XGROUP",
+    "syntax": "XGROUP SETID key group id|$",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XREADGROUP",
+    "syntax": "XREADGROUP GROUP group consumer [COUNT count] [BLOCK milliseconds] [NOACK] STREAMS key [key ...] id [id ...]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XACK",
+    "syntax": "XACK key group id [id ...]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XCLAIM",
+    "syntax": "XCLAIM key group consumer min-idle-time id [id ...] [IDLE ms] [TIME ms-unix-time] [RETRYCOUNT count] [FORCE] [JUSTID]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XAUTOCLAIM",
+    "syntax": "XAUTOCLAIM key group consumer min-idle-time start [COUNT count] [JUSTID]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XPENDING",
+    "syntax": "XPENDING key group [[IDLE min-idle-time] start end count [consumer]]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XTRIM",
+    "syntax": "XTRIM key MAXLEN|MINID [=|~] threshold [LIMIT count]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XINFO",
+    "syntax": "XINFO STREAM key [FULL [COUNT count]]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XINFO",
+    "syntax": "XINFO GROUPS key",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XINFO",
+    "syntax": "XINFO CONSUMERS key group",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "XSETID",
+    "syntax": "XSETID key id|$ [ENTRIESADDED entries-added] [MAXDELETEDID max-deleted-id]",
+    "category": "Stream Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "KEYS",
+    "syntax": "KEYS pattern",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SCAN",
+    "syntax": "SCAN cursor [MATCH pattern] [COUNT count] [TYPE type]",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "TYPE",
+    "syntax": "TYPE key",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DUMP",
+    "syntax": "DUMP key",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "RESTORE",
+    "syntax": "RESTORE key ttl serialized-value [REPLACE] [ABSTTL] [IDLETIME seconds] [FREQ frequency]",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "EXPIRETIME",
+    "syntax": "EXPIRETIME key",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PEXPIRETIME",
+    "syntax": "PEXPIRETIME key",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PEXPIRE",
+    "syntax": "PEXPIRE key milliseconds [NX|XX|GT|LT]",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "RENAME",
+    "syntax": "RENAME key newkey",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "RENAMENX",
+    "syntax": "RENAMENX key newkey",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MOVE",
+    "syntax": "MOVE key db",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "COPY",
+    "syntax": "COPY source destination [DB db] [REPLACE]",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "OBJECT",
+    "syntax": "OBJECT subcommand [arguments]",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "TOUCH",
+    "syntax": "TOUCH key [key ...]",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "UNLINK",
+    "syntax": "UNLINK key [key ...]",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "WAIT",
+    "syntax": "WAIT numreplicas timeout",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "WAITAOF",
+    "syntax": "WAITAOF numlocal numreplicas timeout",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "RANDOMKEY",
+    "syntax": "RANDOMKEY",
+    "category": "Key Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MULTI",
+    "syntax": "MULTI",
+    "category": "Transaction Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "EXEC",
+    "syntax": "EXEC",
+    "category": "Transaction Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DISCARD",
+    "syntax": "DISCARD",
+    "category": "Transaction Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "WATCH",
+    "syntax": "WATCH key [key ...]",
+    "category": "Transaction Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "UNWATCH",
+    "syntax": "UNWATCH",
+    "category": "Transaction Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SUBSCRIBE",
+    "syntax": "SUBSCRIBE channel [channel ...]",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "UNSUBSCRIBE",
+    "syntax": "UNSUBSCRIBE [channel [channel ...]]",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PSUBSCRIBE",
+    "syntax": "PSUBSCRIBE pattern [pattern ...]",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PUNSUBSCRIBE",
+    "syntax": "PUNSUBSCRIBE [pattern [pattern ...]]",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PUBLISH",
+    "syntax": "PUBLISH channel message",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SPUBLISH",
+    "syntax": "SPUBLISH channel message",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SSUBSCRIBE",
+    "syntax": "SSUBSCRIBE shardchannel [shardchannel ...]",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SUNSUBSCRIBE",
+    "syntax": "SUNSUBSCRIBE [shardchannel [shardchannel ...]]",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "PUBSUB",
+    "syntax": "PUBSUB subcommand [argument [argument ...]]",
+    "category": "Pub/Sub Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BGREWRITEAOF",
+    "syntax": "BGREWRITEAOF",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "BGSAVE",
+    "syntax": "BGSAVE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SAVE",
+    "syntax": "SAVE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LASTSAVE",
+    "syntax": "LASTSAVE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "CONFIG",
+    "syntax": "CONFIG GET parameter [parameter ...]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "CONFIG",
+    "syntax": "CONFIG SET parameter value [parameter value ...]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "CONFIG",
+    "syntax": "CONFIG REWRITE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "CONFIG",
+    "syntax": "CONFIG RESETSTAT",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DBSIZE",
+    "syntax": "DBSIZE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DEBUG",
+    "syntax": "DEBUG OBJECT key",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "DEBUG",
+    "syntax": "DEBUG SEGFAULT",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "FLUSHALL",
+    "syntax": "FLUSHALL [ASYNC|SYNC]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "FLUSHDB",
+    "syntax": "FLUSHDB [ASYNC|SYNC]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "INFO",
+    "syntax": "INFO [section]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LOLWUT",
+    "syntax": "LOLWUT [VERSION version]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MEMORY",
+    "syntax": "MEMORY DOCTOR",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MEMORY",
+    "syntax": "MEMORY HELP",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MEMORY",
+    "syntax": "MEMORY MALLOC-STATS",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MEMORY",
+    "syntax": "MEMORY PURGE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MEMORY",
+    "syntax": "MEMORY STATS",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MEMORY",
+    "syntax": "MEMORY USAGE key [SAMPLES count]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MODULE",
+    "syntax": "MODULE LIST",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MODULE",
+    "syntax": "MODULE LOAD path [arg [arg ...]]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MODULE",
+    "syntax": "MODULE UNLOAD name",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "MONITOR",
+    "syntax": "MONITOR",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "REPLICAOF",
+    "syntax": "REPLICAOF host port",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ROLE",
+    "syntax": "ROLE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SHUTDOWN",
+    "syntax": "SHUTDOWN [NOSAVE|SAVE] [NOW] [FORCE] [ABORT]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SLAVEOF",
+    "syntax": "SLAVEOF host port",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SLOWLOG",
+    "syntax": "SLOWLOG subcommand [argument]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SWAPDB",
+    "syntax": "SWAPDB index index",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "SYNC",
+    "syntax": "SYNC",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "TIME",
+    "syntax": "TIME",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "COMMAND",
+    "syntax": "COMMAND",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "COMMAND",
+    "syntax": "COMMAND COUNT",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "COMMAND",
+    "syntax": "COMMAND DOCS [command-name [command-name ...]]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "COMMAND",
+    "syntax": "COMMAND INFO command-name [command-name ...]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "COMMAND",
+    "syntax": "COMMAND LIST",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LATENCY",
+    "syntax": "LATENCY DOCTOR",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LATENCY",
+    "syntax": "LATENCY GRAPH event",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LATENCY",
+    "syntax": "LATENCY HELP",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LATENCY",
+    "syntax": "LATENCY HISTORY event",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LATENCY",
+    "syntax": "LATENCY LATEST",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "LATENCY",
+    "syntax": "LATENCY RESET [event [event ...]]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL LIST",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL USERS",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL GETUSER username",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL SETUSER username [rule [rule ...]]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL DELUSER username [username ...]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL CAT [category]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL GENPASS [bits]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL WHOAMI",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL LOG [count|RESET]",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL HELP",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL LOAD",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "ACL",
+    "syntax": "ACL SAVE",
+    "category": "Server Commands",
+    "section": "Core Redis Commands"
+  },
+  {
+    "name": "JSON.SET",
+    "syntax": "JSON.SET key path value [NX|XX]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.GET",
+    "syntax": "JSON.GET key [INDENT indent] [NEWLINE newline] [SPACE space] [path [path ...]]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.DEL",
+    "syntax": "JSON.DEL key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.MGET",
+    "syntax": "JSON.MGET key [key ...] path",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.TYPE",
+    "syntax": "JSON.TYPE key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.NUMINCRBY",
+    "syntax": "JSON.NUMINCRBY key path number",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.NUMMULTBY",
+    "syntax": "JSON.NUMMULTBY key path number",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.STRAPPEND",
+    "syntax": "JSON.STRAPPEND key [path] value",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.STRLEN",
+    "syntax": "JSON.STRLEN key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.ARRAPPEND",
+    "syntax": "JSON.ARRAPPEND key path value [value ...]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.ARRINDEX",
+    "syntax": "JSON.ARRINDEX key path value [start [stop]]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.ARRINSERT",
+    "syntax": "JSON.ARRINSERT key path index value [value ...]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.ARRLEN",
+    "syntax": "JSON.ARRLEN key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.ARRPOP",
+    "syntax": "JSON.ARRPOP key [path [index]]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.ARRTRIM",
+    "syntax": "JSON.ARRTRIM key path start stop",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.OBJKEYS",
+    "syntax": "JSON.OBJKEYS key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.OBJLEN",
+    "syntax": "JSON.OBJLEN key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.FORGET",
+    "syntax": "JSON.FORGET key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.RESP",
+    "syntax": "JSON.RESP key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.DEBUG",
+    "syntax": "JSON.DEBUG MEMORY key [path]",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "JSON.DEBUG",
+    "syntax": "JSON.DEBUG HELP",
+    "category": "JSON Commands",
+    "section": "JSON Commands"
+  },
+  {
+    "name": "TS.CREATE",
+    "syntax": "TS.CREATE key [RETENTION retentionTime] [ENCODING encoding] [CHUNK_SIZE size] [DUPLICATE_POLICY policy] [LABELS label value [label value ...]]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.ALTER",
+    "syntax": "TS.ALTER key [RETENTION retentionTime] [CHUNK_SIZE size] [DUPLICATE_POLICY policy] [LABELS label value [label value ...]]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.ADD",
+    "syntax": "TS.ADD key timestamp value [RETENTION retentionTime] [ENCODING encoding] [CHUNK_SIZE size] [ON_DUPLICATE policy] [LABELS label value [label value ...]]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.MADD",
+    "syntax": "TS.MADD key timestamp value [key timestamp value ...]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.INCRBY",
+    "syntax": "TS.INCRBY key value [TIMESTAMP timestamp] [RETENTION retentionTime] [UNCOMPRESSED]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.DECRBY",
+    "syntax": "TS.DECRBY key value [TIMESTAMP timestamp] [RETENTION retentionTime] [UNCOMPRESSED]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.DEL",
+    "syntax": "TS.DEL key fromTimestamp toTimestamp",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.CREATERULE",
+    "syntax": "TS.CREATERULE sourceKey destKey AGGREGATION aggregationType timeBucket",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.DELETERULE",
+    "syntax": "TS.DELETERULE sourceKey destKey",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.RANGE",
+    "syntax": "TS.RANGE key fromTimestamp toTimestamp [COUNT count] [AGGREGATION aggregationType timeBucket [BUCKETTIMESTAMP bt] [EMPTY]]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.REVRANGE",
+    "syntax": "TS.REVRANGE key fromTimestamp toTimestamp [COUNT count] [AGGREGATION aggregationType timeBucket [BUCKETTIMESTAMP bt] [EMPTY]]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.MRANGE",
+    "syntax": "TS.MRANGE fromTimestamp toTimestamp [COUNT count] [AGGREGATION aggregationType timeBucket [BUCKETTIMESTAMP bt] [EMPTY]] [WITHLABELS] [SELECTED_LABELS label [label ...]] [FILTER filter [filter ...]] [GROUPBY label REDUCE reducer]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.MREVRANGE",
+    "syntax": "TS.MREVRANGE fromTimestamp toTimestamp [COUNT count] [AGGREGATION aggregationType timeBucket [BUCKETTIMESTAMP bt] [EMPTY]] [WITHLABELS] [SELECTED_LABELS label [label ...]] [FILTER filter [filter ...]] [GROUPBY label REDUCE reducer]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.GET",
+    "syntax": "TS.GET key",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.MGET",
+    "syntax": "TS.MGET [WITHLABELS] [SELECTED_LABELS label [label ...]] FILTER filter [filter ...]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.INFO",
+    "syntax": "TS.INFO key [DEBUG]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "TS.QUERYINDEX",
+    "syntax": "TS.QUERYINDEX filter [filter ...]",
+    "category": "Time Series Commands",
+    "section": "Time Series Commands"
+  },
+  {
+    "name": "FT.CREATE",
+    "syntax": "FT.CREATE index [ON HASH|JSON] [PREFIX count prefix [prefix ...]] [SCHEMA field type [field type ...]]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.DROPINDEX",
+    "syntax": "FT.DROPINDEX index [DD]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.LIST",
+    "syntax": "FT.LIST",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.ADD",
+    "syntax": "FT.ADD index docId score [NOSAVE] [REPLACE] [PARTIAL] [LANGUAGE lang] [PAYLOAD payload] [FIELDS field value [field value ...]]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.DEL",
+    "syntax": "FT.DEL index docId [DD]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.GET",
+    "syntax": "FT.GET index docId",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.MGET",
+    "syntax": "FT.MGET index [index ...] docId [docId ...]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SEARCH",
+    "syntax": "FT.SEARCH index query [NOCONTENT] [VERBATIM] [NOSTOPWORDS] [WITHSCORES] [WITHPAYLOADS] [WITHSORTKEYS] [FILTER numericField min max [FILTER numericField min max ...]] [GEOFILTER geoField lon lat radius M|KM|MI|FT] [INKEYS count key [key ...]] [INFIELDS count field [field ...]] [RETURN count field [field ...]] [SUMMARIZE [FIELDS count field [field ...]] [FRAGS num] [LEN fragsize] [SEPARATOR separator]] [HIGHLIGHT [FIELDS count field [field ...]] [TAGS open close]] [SLOP slop] [TIMEOUT timeout] [LIMIT offset num]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.AGGREGATE",
+    "syntax": "FT.AGGREGATE index query [VERBATIM] [LOAD count field [field ...]] [GROUPBY nargs property [property ...] [REDUCE func nargs arg [arg ...] [AS name]] [REDUCE ...]] [SORTBY nargs [property [ASC|DESC] [property [ASC|DESC] ...]] [MAX num] [AS name]] [APPLY expr AS name] [FILTER expr] [LIMIT offset num] [QUERY_EXECUTION_TIME] [TIMEOUT timeout]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.CURSOR",
+    "syntax": "FT.CURSOR READ index cursor [COUNT count]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.CURSOR",
+    "syntax": "FT.CURSOR DEL index cursor",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SUGADD",
+    "syntax": "FT.SUGADD index term score [INCR] [PAYLOAD payload]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SUGGET",
+    "syntax": "FT.SUGGET index prefix [FUZZY] [WITHSCORES] [WITHPAYLOADS] [MAX max]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SUGDEL",
+    "syntax": "FT.SUGDEL index term",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SUGLEN",
+    "syntax": "FT.SUGLEN index",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SYNUPDATE",
+    "syntax": "FT.SYNUPDATE index synonymGroupId [SKIPINITIALSCAN] term [term ...]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SYNDUMP",
+    "syntax": "FT.SYNDUMP index",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.SPELLCHECK",
+    "syntax": "FT.SPELLCHECK index query [DISTANCE dist] [TERMS {INCLUDE | EXCLUDE} dict [TERMS {INCLUDE | EXCLUDE} dict ...]] [FULLSCOREINFO] [TIMEOUT timeout]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.DICTADD",
+    "syntax": "FT.DICTADD dict term [term ...]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.DICTDEL",
+    "syntax": "FT.DICTDEL dict term [term ...]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.DICTDUMP",
+    "syntax": "FT.DICTDUMP dict",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.TAGVALS",
+    "syntax": "FT.TAGVALS index field",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.EXPLAIN",
+    "syntax": "FT.EXPLAIN index query [DIALECT dialect]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.EXPLAINCLI",
+    "syntax": "FT.EXPLAINCLI index query [DIALECT dialect]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.ALTER",
+    "syntax": "FT.ALTER index SCHEMA ADD field type [field type ...]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.ALIASADD",
+    "syntax": "FT.ALIASADD name index",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.ALIASUPDATE",
+    "syntax": "FT.ALIASUPDATE name index",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.ALIASDEL",
+    "syntax": "FT.ALIASDEL name",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.INFO",
+    "syntax": "FT.INFO index",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT._LIST",
+    "syntax": "FT._LIST",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.CONFIG",
+    "syntax": "FT.CONFIG GET option [option ...]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.CONFIG",
+    "syntax": "FT.CONFIG SET option value",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "FT.CONFIG",
+    "syntax": "FT.CONFIG HELP [option]",
+    "category": "Search Commands",
+    "section": "Search Commands"
+  },
+  {
+    "name": "GRAPH.QUERY",
+    "syntax": "GRAPH.QUERY graphName query [TIMEOUT timeout] [READWRITE]",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.RO_QUERY",
+    "syntax": "GRAPH.RO_QUERY graphName query [TIMEOUT timeout]",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.EXPLAIN",
+    "syntax": "GRAPH.EXPLAIN graphName query",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.PROFILE",
+    "syntax": "GRAPH.PROFILE graphName query [TIMEOUT timeout]",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.DELETE",
+    "syntax": "GRAPH.DELETE graphName",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.SLOWLOG",
+    "syntax": "GRAPH.SLOWLOG graphName",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.CONFIG",
+    "syntax": "GRAPH.CONFIG GET name",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.CONFIG",
+    "syntax": "GRAPH.CONFIG SET name value",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.LIST",
+    "syntax": "GRAPH.LIST",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.CONSTRAINT",
+    "syntax": "GRAPH.CONSTRAINT CREATE graphName constraintType nodeLabel|relType properties [entityType entityType]",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "GRAPH.CONSTRAINT",
+    "syntax": "GRAPH.CONSTRAINT DROP graphName constraintType nodeLabel|relType properties [entityType entityType]",
+    "category": "Graph Commands",
+    "section": "Graph Commands"
+  },
+  {
+    "name": "BF.RESERVE",
+    "syntax": "BF.RESERVE key errorRate capacity [EXPANSION expansion] [NONSCALING]",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.ADD",
+    "syntax": "BF.ADD key item",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.MADD",
+    "syntax": "BF.MADD key item [item ...]",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.INSERT",
+    "syntax": "BF.INSERT key [CAPACITY capacity] [ERROR error] [EXPANSION expansion] [NOCREATE] [NONSCALING] ITEMS item [item ...]",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.EXISTS",
+    "syntax": "BF.EXISTS key item",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.MEXISTS",
+    "syntax": "BF.MEXISTS key item [item ...]",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.SCANDUMP",
+    "syntax": "BF.SCANDUMP key iterator",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.LOADCHUNK",
+    "syntax": "BF.LOADCHUNK key iterator data",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.INFO",
+    "syntax": "BF.INFO key",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "BF.DEBUG",
+    "syntax": "BF.DEBUG key",
+    "category": "Bloom Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.RESERVE",
+    "syntax": "CF.RESERVE key capacity [BUCKETSIZE bucketsize] [MAXITERATIONS maxiterations] [EXPANSION expansion]",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.ADD",
+    "syntax": "CF.ADD key item",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.ADDNX",
+    "syntax": "CF.ADDNX key item",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.INSERT",
+    "syntax": "CF.INSERT key [CAPACITY capacity] [NOCREATE] ITEMS item [item ...]",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.INSERTNX",
+    "syntax": "CF.INSERTNX key [CAPACITY capacity] [NOCREATE] ITEMS item [item ...]",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.DEL",
+    "syntax": "CF.DEL key item",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.COUNT",
+    "syntax": "CF.COUNT key item",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.EXISTS",
+    "syntax": "CF.EXISTS key item",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.MEXISTS",
+    "syntax": "CF.MEXISTS key item [item ...]",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.SCANDUMP",
+    "syntax": "CF.SCANDUMP key iterator",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.LOADCHUNK",
+    "syntax": "CF.LOADCHUNK key iterator data",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CF.INFO",
+    "syntax": "CF.INFO key",
+    "category": "Cuckoo Filter",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CMS.INITBYDIM",
+    "syntax": "CMS.INITBYDIM key width depth",
+    "category": "Count-Min Sketch",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CMS.INITBYPROB",
+    "syntax": "CMS.INITBYPROB key error probability",
+    "category": "Count-Min Sketch",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CMS.INCRBY",
+    "syntax": "CMS.INCRBY key item increment [item increment ...]",
+    "category": "Count-Min Sketch",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CMS.QUERY",
+    "syntax": "CMS.QUERY key item [item ...]",
+    "category": "Count-Min Sketch",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CMS.MERGE",
+    "syntax": "CMS.MERGE dest numKeys key [key ...] [WEIGHTS weight [weight ...]]",
+    "category": "Count-Min Sketch",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CMS.INFO",
+    "syntax": "CMS.INFO key",
+    "category": "Count-Min Sketch",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "TOPK.RESERVE",
+    "syntax": "TOPK.RESERVE key topk [width depth decay]",
+    "category": "Top-K",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "TOPK.ADD",
+    "syntax": "TOPK.ADD key item [item ...]",
+    "category": "Top-K",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "TOPK.INCRBY",
+    "syntax": "TOPK.INCRBY key item increment [item increment ...]",
+    "category": "Top-K",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "TOPK.QUERY",
+    "syntax": "TOPK.QUERY key item [item ...]",
+    "category": "Top-K",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "TOPK.COUNT",
+    "syntax": "TOPK.COUNT key item [item ...]",
+    "category": "Top-K",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "TOPK.LIST",
+    "syntax": "TOPK.LIST key [WITHCOUNT]",
+    "category": "Top-K",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "TOPK.INFO",
+    "syntax": "TOPK.INFO key",
+    "category": "Top-K",
+    "section": "Probabilistic Commands"
+  },
+  {
+    "name": "CIRCUITX.CREATE",
+    "syntax": "CIRCUITX.CREATE name [FAILURE_THRESHOLD threshold] [SUCCESS_THRESHOLD threshold] [TIMEOUT timeout] [HALF_OPEN_MAX max]",
+    "category": "Circuit Breaker",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "CIRCUITX.OPEN",
+    "syntax": "CIRCUITX.OPEN name",
+    "category": "Circuit Breaker",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "CIRCUITX.CLOSE",
+    "syntax": "CIRCUITX.CLOSE name",
+    "category": "Circuit Breaker",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "CIRCUITX.STATUS",
+    "syntax": "CIRCUITX.STATUS name",
+    "category": "Circuit Breaker",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "CIRCUITX.METRICS",
+    "syntax": "CIRCUITX.METRICS name",
+    "category": "Circuit Breaker",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "CIRCUITX.RESET",
+    "syntax": "CIRCUITX.RESET name",
+    "category": "Circuit Breaker",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "CIRCUITX.DELETE",
+    "syntax": "CIRCUITX.DELETE name",
+    "category": "Circuit Breaker",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RATELIMITER.CREATE",
+    "syntax": "RATELIMITER.CREATE name rate burst [DURATION duration]",
+    "category": "Rate Limiter",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RATELIMITER.TRY",
+    "syntax": "RATELIMITER.TRY name [COST cost]",
+    "category": "Rate Limiter",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RATELIMITER.WAIT",
+    "syntax": "RATELIMITER.WAIT name [COST cost] [TIMEOUT timeout]",
+    "category": "Rate Limiter",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RATELIMITER.RESET",
+    "syntax": "RATELIMITER.RESET name",
+    "category": "Rate Limiter",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RATELIMITER.STATUS",
+    "syntax": "RATELIMITER.STATUS name",
+    "category": "Rate Limiter",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RATELIMITER.DELETE",
+    "syntax": "RATELIMITER.DELETE name",
+    "category": "Rate Limiter",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RETRY.CREATE",
+    "syntax": "RETRY.CREATE name maxAttempts [BACKOFF_TYPE type] [INITIAL_DELAY delay] [MAX_DELAY delay]",
+    "category": "Retry",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RETRY.EXECUTE",
+    "syntax": "RETRY.EXECUTE name command [args ...]",
+    "category": "Retry",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RETRY.STATUS",
+    "syntax": "RETRY.STATUS name",
+    "category": "Retry",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "RETRY.DELETE",
+    "syntax": "RETRY.DELETE name",
+    "category": "Retry",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "BULKHEAD.CREATE",
+    "syntax": "BULKHEAD.CREATE name maxConcurrent [MAX_WAIT maxWait]",
+    "category": "Bulkhead",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "BULKHEAD.ACQUIRE",
+    "syntax": "BULKHEAD.ACQUIRE name [TIMEOUT timeout]",
+    "category": "Bulkhead",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "BULKHEAD.RELEASE",
+    "syntax": "BULKHEAD.RELEASE name",
+    "category": "Bulkhead",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "BULKHEAD.STATUS",
+    "syntax": "BULKHEAD.STATUS name",
+    "category": "Bulkhead",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "BULKHEAD.DELETE",
+    "syntax": "BULKHEAD.DELETE name",
+    "category": "Bulkhead",
+    "section": "Resilience Commands"
+  },
+  {
+    "name": "AGGREGATOR.CREATE",
+    "syntax": "AGGREGATOR.CREATE name windowSize [TYPE type]",
+    "category": "Aggregation",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "AGGREGATOR.ADD",
+    "syntax": "AGGREGATOR.ADD name value [TIMESTAMP timestamp]",
+    "category": "Aggregation",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "AGGREGATOR.GET",
+    "syntax": "AGGREGATOR.GET name [TYPE type]",
+    "category": "Aggregation",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "AGGREGATOR.RESET",
+    "syntax": "AGGREGATOR.RESET name",
+    "category": "Aggregation",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "WINDOWX.CREATE",
+    "syntax": "WINDOWX.CREATE name size [TYPE sliding|tumbling|session] [GAP gap]",
+    "category": "Windowing",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "WINDOWX.ADD",
+    "syntax": "WINDOWX.ADD name value",
+    "category": "Windowing",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "WINDOWX.GET",
+    "syntax": "WINDOWX.GET name",
+    "category": "Windowing",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "WINDOWX.AGGREGATE",
+    "syntax": "WINDOWX.AGGREGATE name TYPE type",
+    "category": "Windowing",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "JOINX.CREATE",
+    "syntax": "JOINX.CREATE name type [CONDITION condition]",
+    "category": "Stream Joins",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "JOINX.ADD",
+    "syntax": "JOINX.ADD stream value",
+    "category": "Stream Joins",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "JOINX.GET",
+    "syntax": "JOINX.GET name",
+    "category": "Stream Joins",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "JOINX.DELETE",
+    "syntax": "JOINX.DELETE name",
+    "category": "Stream Joins",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "PARTITIONX.CREATE",
+    "syntax": "PARTITIONX.CREATE name count [STRATEGY strategy]",
+    "category": "Partitioning",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "PARTITIONX.ADD",
+    "syntax": "PARTITIONX.ADD name key value",
+    "category": "Partitioning",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "PARTITIONX.GET",
+    "syntax": "PARTITIONX.GET name key",
+    "category": "Partitioning",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "PARTITIONX.REBALANCE",
+    "syntax": "PARTITIONX.REBALANCE name",
+    "category": "Partitioning",
+    "section": "Data Processing Commands"
+  },
+  {
+    "name": "MODEL.CREATE",
+    "syntax": "MODEL.CREATE name type [PARAMS param value [param value ...]]",
+    "category": "Model Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "MODEL.TRAIN",
+    "syntax": "MODEL.TRAIN name dataKey [PARAMS param value ...]",
+    "category": "Model Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "MODEL.PREDICT",
+    "syntax": "MODEL.PREDICT name inputKey",
+    "category": "Model Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "MODEL.DELETE",
+    "syntax": "MODEL.DELETE name",
+    "category": "Model Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "MODEL.LIST",
+    "syntax": "MODEL.LIST [PATTERN pattern]",
+    "category": "Model Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "MODEL.STATUS",
+    "syntax": "MODEL.STATUS name",
+    "category": "Model Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "FEATURE.SET",
+    "syntax": "FEATURE.SET key field value",
+    "category": "Feature Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "FEATURE.GET",
+    "syntax": "FEATURE.GET key field",
+    "category": "Feature Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "FEATURE.DEL",
+    "syntax": "FEATURE.DEL key field",
+    "category": "Feature Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "FEATURE.INCR",
+    "syntax": "FEATURE.INCR key field [BY increment]",
+    "category": "Feature Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "FEATURE.NORMALIZE",
+    "syntax": "FEATURE.NORMALIZE key [METHOD method]",
+    "category": "Feature Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "FEATURE.VECTOR",
+    "syntax": "FEATURE.VECTOR key [FIELDS field [field ...]]",
+    "category": "Feature Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "EMBEDDING.CREATE",
+    "syntax": "EMBEDDING.CREATE name dimensions [METRIC metric]",
+    "category": "Embedding Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "EMBEDDING.GET",
+    "syntax": "EMBEDDING.GET name key",
+    "category": "Embedding Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "EMBEDDING.SEARCH",
+    "syntax": "EMBEDDING.SEARCH name vector [K k] [THRESHOLD threshold]",
+    "category": "Embedding Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "EMBEDDING.SIMILAR",
+    "syntax": "EMBEDDING.SIMILAR name key [K k]",
+    "category": "Embedding Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "EMBEDDING.DELETE",
+    "syntax": "EMBEDDING.DELETE name key",
+    "category": "Embedding Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "TENSOR.CREATE",
+    "syntax": "TENSOR.CREATE name shape [DTYPE dtype] [DATA data]",
+    "category": "Tensor Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "TENSOR.GET",
+    "syntax": "TENSOR.GET name",
+    "category": "Tensor Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "TENSOR.ADD",
+    "syntax": "TENSOR.ADD name1 name2 [OUT out]",
+    "category": "Tensor Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "TENSOR.MATMUL",
+    "syntax": "TENSOR.MATMUL name1 name2 [OUT out]",
+    "category": "Tensor Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "TENSOR.RESHAPE",
+    "syntax": "TENSOR.RESHAPE name shape",
+    "category": "Tensor Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "TENSOR.DELETE",
+    "syntax": "TENSOR.DELETE name",
+    "category": "Tensor Commands",
+    "section": "Machine Learning Commands"
+  },
+  {
+    "name": "SET",
+    "syntax": "SET key value [EX seconds] [PX milliseconds] [NX|XX] [TAGS tag [tag ...]]",
+    "category": "Tag-Based Invalidation Commands",
+    "section": "Tag-Based Invalidation Commands"
+  },
+  {
+    "name": "TAGS",
+    "syntax": "TAGS key [tag [tag ...]]",
+    "category": "Tag-Based Invalidation Commands",
+    "section": "Tag-Based Invalidation Commands"
+  },
+  {
+    "name": "TAGKEYS",
+    "syntax": "TAGKEYS tag",
+    "category": "Tag-Based Invalidation Commands",
+    "section": "Tag-Based Invalidation Commands"
+  },
+  {
+    "name": "TAGDEL",
+    "syntax": "TAGDEL tag [tag ...]",
+    "category": "Tag-Based Invalidation Commands",
+    "section": "Tag-Based Invalidation Commands"
+  },
+  {
+    "name": "INVALIDATE",
+    "syntax": "INVALIDATE tag [tag ...]",
+    "category": "Tag-Based Invalidation Commands",
+    "section": "Tag-Based Invalidation Commands"
+  },
+  {
+    "name": "TAGEXISTS",
+    "syntax": "TAGEXISTS tag",
+    "category": "Tag-Based Invalidation Commands",
+    "section": "Tag-Based Invalidation Commands"
+  },
+  {
+    "name": "TAGTTL",
+    "syntax": "TAGTTL tag",
+    "category": "Tag-Based Invalidation Commands",
+    "section": "Tag-Based Invalidation Commands"
+  },
+  {
+    "name": "COMMAND",
+    "syntax": "COMMAND INFO SET",
+    "category": "Command Help",
+    "section": "Command Help"
+  },
+  {
+    "name": "COMMAND",
+    "syntax": "COMMAND DOCS GET",
+    "category": "Command Help",
+    "section": "Command Help"
+  },
+  {
+    "name": "NAMESPACE",
+    "syntax": "NAMESPACE name                    # Switch to namespace",
+    "category": "Namespace Commands",
+    "section": "Namespace Commands"
+  },
+  {
+    "name": "NAMESPACES",
+    "syntax": "NAMESPACES                        # List all namespaces",
+    "category": "Namespace Commands",
+    "section": "Namespace Commands"
+  },
+  {
+    "name": "NAMESPACEDEL",
+    "syntax": "NAMESPACEDEL name                 # Delete a namespace",
+    "category": "Namespace Commands",
+    "section": "Namespace Commands"
+  },
+  {
+    "name": "NAMESPACEINFO",
+    "syntax": "NAMESPACEINFO [name]              # Get namespace info",
+    "category": "Namespace Commands",
+    "section": "Namespace Commands"
+  },
+  {
+    "name": "SELECT",
+    "syntax": "SELECT index                      # Select database (alias for namespace)",
+    "category": "Namespace Commands",
+    "section": "Namespace Commands"
+  },
+  {
+    "name": "WORKFLOW.CREATE",
+    "syntax": "WORKFLOW.CREATE name [description]",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.DELETE",
+    "syntax": "WORKFLOW.DELETE name",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.GET",
+    "syntax": "WORKFLOW.GET name",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.LIST",
+    "syntax": "WORKFLOW.LIST [pattern]",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.START",
+    "syntax": "WORKFLOW.START name [vars...]",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.PAUSE",
+    "syntax": "WORKFLOW.PAUSE id",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.COMPLETE",
+    "syntax": "WORKFLOW.COMPLETE id",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.FAIL",
+    "syntax": "WORKFLOW.FAIL id [reason]",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.RESET",
+    "syntax": "WORKFLOW.RESET id",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.NEXT",
+    "syntax": "WORKFLOW.NEXT id",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.SETVAR",
+    "syntax": "WORKFLOW.SETVAR id key value",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.GETVAR",
+    "syntax": "WORKFLOW.GETVAR id key",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "WORKFLOW.ADDSTEP",
+    "syntax": "WORKFLOW.ADDSTEP workflow name type [config]",
+    "category": "Workflow Management",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.CREATE",
+    "syntax": "STATEM.CREATE name [description]",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.DELETE",
+    "syntax": "STATEM.DELETE name",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.ADDSTATE",
+    "syntax": "STATEM.ADDSTATE machine state [type]",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.ADDTRANS",
+    "syntax": "STATEM.ADDTRANS machine from to event [condition]",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.TRIGGER",
+    "syntax": "STATEM.TRIGGER machine event [data]",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.CURRENT",
+    "syntax": "STATEM.CURRENT machine",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.CANTRIGGER",
+    "syntax": "STATEM.CANTRIGGER machine event",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.EVENTS",
+    "syntax": "STATEM.EVENTS machine",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.RESET",
+    "syntax": "STATEM.RESET machine [state]",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.ISFINAL",
+    "syntax": "STATEM.ISFINAL machine",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.INFO",
+    "syntax": "STATEM.INFO machine",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "STATEM.LIST",
+    "syntax": "STATEM.LIST [pattern]",
+    "category": "State Machine",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "TEMPLATE.CREATE",
+    "syntax": "TEMPLATE.CREATE name content",
+    "category": "Templates",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "TEMPLATE.DELETE",
+    "syntax": "TEMPLATE.DELETE name",
+    "category": "Templates",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "TEMPLATE.GET",
+    "syntax": "TEMPLATE.GET name",
+    "category": "Templates",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "TEMPLATE.INSTANTIATE",
+    "syntax": "TEMPLATE.INSTANTIATE name [vars...]",
+    "category": "Templates",
+    "section": "Workflow Commands"
+  },
+  {
+    "name": "ACTOR.CREATE",
+    "syntax": "ACTOR.CREATE name [mailbox_size]",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.DELETE",
+    "syntax": "ACTOR.DELETE name",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.SEND",
+    "syntax": "ACTOR.SEND name message",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.RECV",
+    "syntax": "ACTOR.RECV name [timeout]",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.POKE",
+    "syntax": "ACTOR.POKE name",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.PEEK",
+    "syntax": "ACTOR.PEEK name",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.LEN",
+    "syntax": "ACTOR.LEN name",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.LIST",
+    "syntax": "ACTOR.LIST [pattern]",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "ACTOR.CLEAR",
+    "syntax": "ACTOR.CLEAR name",
+    "category": "Actor Model",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.CREATE",
+    "syntax": "DAG.CREATE name",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.DELETE",
+    "syntax": "DAG.DELETE name",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.ADDNODE",
+    "syntax": "DAG.ADDNODE name node [data]",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.ADDEDGE",
+    "syntax": "DAG.ADDEDGE name from to [weight]",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.TOPO",
+    "syntax": "DAG.TOPO name",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.PARENTS",
+    "syntax": "DAG.PARENTS name node",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.CHILDREN",
+    "syntax": "DAG.CHILDREN name node",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "DAG.LIST",
+    "syntax": "DAG.LIST [pattern]",
+    "category": "DAG (Directed Acyclic Graph)",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "PARALLEL.EXEC",
+    "syntax": "PARALLEL.EXEC commands... [MAX max]",
+    "category": "Parallel Processing",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "PARALLEL.MAP",
+    "syntax": "PARALLEL.MAP key command",
+    "category": "Parallel Processing",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "PARALLEL.REDUCE",
+    "syntax": "PARALLEL.REDUCE key command [INITIAL value]",
+    "category": "Parallel Processing",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "PARALLEL.FILTER",
+    "syntax": "PARALLEL.FILTER key command",
+    "category": "Parallel Processing",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SECRET.SET",
+    "syntax": "SECRET.SET key value [TTL ttl]",
+    "category": "Secrets Management",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SECRET.GET",
+    "syntax": "SECRET.GET key",
+    "category": "Secrets Management",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SECRET.DELETE",
+    "syntax": "SECRET.DELETE key",
+    "category": "Secrets Management",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SECRET.LIST",
+    "syntax": "SECRET.LIST [pattern]",
+    "category": "Secrets Management",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SECRET.ROTATE",
+    "syntax": "SECRET.ROTATE key",
+    "category": "Secrets Management",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SECRET.VERSION",
+    "syntax": "SECRET.VERSION key",
+    "category": "Secrets Management",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "CONFIG.SET",
+    "syntax": "CONFIG.SET key value [NAMESPACE ns]",
+    "category": "Configuration",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "CONFIG.GET",
+    "syntax": "CONFIG.GET key [NAMESPACE ns]",
+    "category": "Configuration",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "CONFIG.DELETE",
+    "syntax": "CONFIG.DELETE key [NAMESPACE ns]",
+    "category": "Configuration",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "CONFIG.LIST",
+    "syntax": "CONFIG.LIST [pattern] [NAMESPACE ns]",
+    "category": "Configuration",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "CONFIG.NAMESPACE",
+    "syntax": "CONFIG.NAMESPACE ns command",
+    "category": "Configuration",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "CONFIG.IMPORT",
+    "syntax": "CONFIG.IMPORT data [FORMAT format]",
+    "category": "Configuration",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "CONFIG.EXPORT",
+    "syntax": "CONFIG.EXPORT [pattern] [FORMAT format]",
+    "category": "Configuration",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "TRIE.ADD",
+    "syntax": "TRIE.ADD name key [value]",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "TRIE.SEARCH",
+    "syntax": "TRIE.SEARCH name prefix",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "TRIE.PREFIX",
+    "syntax": "TRIE.PREFIX name prefix [COUNT count]",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "TRIE.DELETE",
+    "syntax": "TRIE.DELETE name key",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "TRIE.AUTOCOMPLETE",
+    "syntax": "TRIE.AUTOCOMPLETE name prefix [COUNT count]",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "RING.CREATE",
+    "syntax": "RING.CREATE name [replicas]",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "RING.ADD",
+    "syntax": "RING.ADD name node [weight]",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "RING.GET",
+    "syntax": "RING.GET name key",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "RING.NODES",
+    "syntax": "RING.NODES name",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "RING.REMOVE",
+    "syntax": "RING.REMOVE name node",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SEM.CREATE",
+    "syntax": "SEM.CREATE name count",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SEM.ACQUIRE",
+    "syntax": "SEM.ACQUIRE name [timeout]",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SEM.RELEASE",
+    "syntax": "SEM.RELEASE name",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SEM.TRYACQUIRE",
+    "syntax": "SEM.TRYACQUIRE name",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "SEM.VALUE",
+    "syntax": "SEM.VALUE name",
+    "category": "Data Structures",
+    "section": "Advanced Commands"
+  },
+  {
+    "name": "MSGPACK.ENCODE",
+    "syntax": "MSGPACK.ENCODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "MSGPACK.DECODE",
+    "syntax": "MSGPACK.DECODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "BSON.ENCODE",
+    "syntax": "BSON.ENCODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "BSON.DECODE",
+    "syntax": "BSON.DECODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "URL.ENCODE",
+    "syntax": "URL.ENCODE string",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "URL.DECODE",
+    "syntax": "URL.DECODE string",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "XML.ENCODE",
+    "syntax": "XML.ENCODE data [ROOT root]",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "XML.DECODE",
+    "syntax": "XML.DECODE xml",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "YAML.ENCODE",
+    "syntax": "YAML.ENCODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "YAML.DECODE",
+    "syntax": "YAML.DECODE yaml",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TOML.ENCODE",
+    "syntax": "TOML.ENCODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TOML.DECODE",
+    "syntax": "TOML.DECODE toml",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "CBOR.ENCODE",
+    "syntax": "CBOR.ENCODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "CBOR.DECODE",
+    "syntax": "CBOR.DECODE data",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "CSV.ENCODE",
+    "syntax": "CSV.ENCODE rows [DELIMITER delim]",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "CSV.DECODE",
+    "syntax": "CSV.DECODE csv [DELIMITER delim]",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "UUID.GEN",
+    "syntax": "UUID.GEN [VERSION version]",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "UUID.VALIDATE",
+    "syntax": "UUID.VALIDATE uuid",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "UUID.VERSION",
+    "syntax": "UUID.VERSION uuid",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "ULID.GEN",
+    "syntax": "ULID.GEN",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "ULID.EXTRACT",
+    "syntax": "ULID.EXTRACT ulid",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TIMESTAMP.NOW",
+    "syntax": "TIMESTAMP.NOW [UNIT unit]",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TIMESTAMP.PARSE",
+    "syntax": "TIMESTAMP.PARSE format string",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TIMESTAMP.FORMAT",
+    "syntax": "TIMESTAMP.FORMAT timestamp format",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TIMESTAMP.ADD",
+    "syntax": "TIMESTAMP.ADD timestamp amount unit",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TIMESTAMP.DIFF",
+    "syntax": "TIMESTAMP.DIFF t1 t2 unit",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TIMESTAMP.STARTOF",
+    "syntax": "TIMESTAMP.STARTOF timestamp unit",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "TIMESTAMP.ENDOF",
+    "syntax": "TIMESTAMP.ENDOF timestamp unit",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "DIFF.TEXT",
+    "syntax": "DIFF.TEXT text1 text2",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "DIFF.JSON",
+    "syntax": "DIFF.JSON json1 json2",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "POOL.CREATE",
+    "syntax": "POOL.CREATE name size [FACTORY factory]",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "POOL.GET",
+    "syntax": "POOL.GET name [TIMEOUT timeout]",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "POOL.PUT",
+    "syntax": "POOL.PUT name item",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "POOL.CLEAR",
+    "syntax": "POOL.CLEAR name",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "POOL.STATS",
+    "syntax": "POOL.STATS name",
+    "category": "Encoding Commands",
+    "section": "Encoding Commands"
+  },
+  {
+    "name": "DIGEST.MD5",
+    "syntax": "DIGEST.MD5 data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.SHA1",
+    "syntax": "DIGEST.SHA1 data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.SHA256",
+    "syntax": "DIGEST.SHA256 data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.SHA512",
+    "syntax": "DIGEST.SHA512 data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.HMAC",
+    "syntax": "DIGEST.HMAC algorithm key data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.HMACMD5",
+    "syntax": "DIGEST.HMACMD5 key data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.HMACSHA1",
+    "syntax": "DIGEST.HMACSHA1 key data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.HMACSHA256",
+    "syntax": "DIGEST.HMACSHA256 key data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.HMACSHA512",
+    "syntax": "DIGEST.HMACSHA512 key data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.CRC32",
+    "syntax": "DIGEST.CRC32 data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.ADLER32",
+    "syntax": "DIGEST.ADLER32 data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.BASE64ENCODE",
+    "syntax": "DIGEST.BASE64ENCODE data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.BASE64DECODE",
+    "syntax": "DIGEST.BASE64DECODE data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.HEXENCODE",
+    "syntax": "DIGEST.HEXENCODE data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "DIGEST.HEXDECODE",
+    "syntax": "DIGEST.HEXDECODE data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "CRYPTO.HASH",
+    "syntax": "CRYPTO.HASH algorithm data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "CRYPTO.HMAC",
+    "syntax": "CRYPTO.HMAC algorithm key data",
+    "category": "Digest Commands",
+    "section": "Digest Commands"
+  },
+  {
+    "name": "EVENT.EMIT",
+    "syntax": "EVENT.EMIT channel event [data]",
+    "category": "Event Sourcing",
+    "section": "Event Commands"
+  },
+  {
+    "name": "EVENT.GET",
+    "syntax": "EVENT.GET channel [cursor] [COUNT count]",
+    "category": "Event Sourcing",
+    "section": "Event Commands"
+  },
+  {
+    "name": "EVENT.LIST",
+    "syntax": "EVENT.LIST [pattern]",
+    "category": "Event Sourcing",
+    "section": "Event Commands"
+  },
+  {
+    "name": "EVENT.CLEAR",
+    "syntax": "EVENT.CLEAR channel",
+    "category": "Event Sourcing",
+    "section": "Event Commands"
+  },
+  {
+    "name": "WEBHOOK.CREATE",
+    "syntax": "WEBHOOK.CREATE name url [EVENTS events...] [SECRET secret]",
+    "category": "Webhooks",
+    "section": "Event Commands"
+  },
+  {
+    "name": "WEBHOOK.DELETE",
+    "syntax": "WEBHOOK.DELETE name",
+    "category": "Webhooks",
+    "section": "Event Commands"
+  },
+  {
+    "name": "WEBHOOK.GET",
+    "syntax": "WEBHOOK.GET name",
+    "category": "Webhooks",
+    "section": "Event Commands"
+  },
+  {
+    "name": "WEBHOOK.LIST",
+    "syntax": "WEBHOOK.LIST [pattern]",
+    "category": "Webhooks",
+    "section": "Event Commands"
+  },
+  {
+    "name": "WEBHOOK.ENABLE",
+    "syntax": "WEBHOOK.ENABLE name",
+    "category": "Webhooks",
+    "section": "Event Commands"
+  },
+  {
+    "name": "WEBHOOK.DISABLE",
+    "syntax": "WEBHOOK.DISABLE name",
+    "category": "Webhooks",
+    "section": "Event Commands"
+  },
+  {
+    "name": "WEBHOOK.STATS",
+    "syntax": "WEBHOOK.STATS name",
+    "category": "Webhooks",
+    "section": "Event Commands"
+  },
+  {
+    "name": "COMPRESS.RLE",
+    "syntax": "COMPRESS.RLE data",
+    "category": "Compression",
+    "section": "Event Commands"
+  },
+  {
+    "name": "DECOMPRESS.RLE",
+    "syntax": "DECOMPRESS.RLE data",
+    "category": "Compression",
+    "section": "Event Commands"
+  },
+  {
+    "name": "COMPRESS.LZ4",
+    "syntax": "COMPRESS.LZ4 data",
+    "category": "Compression",
+    "section": "Event Commands"
+  },
+  {
+    "name": "DECOMPRESS.LZ4",
+    "syntax": "DECOMPRESS.LZ4 data",
+    "category": "Compression",
+    "section": "Event Commands"
+  },
+  {
+    "name": "COMPRESS.CUSTOM",
+    "syntax": "COMPRESS.CUSTOM algorithm data [LEVEL level]",
+    "category": "Compression",
+    "section": "Event Commands"
+  },
+  {
+    "name": "QUEUE.CREATE",
+    "syntax": "QUEUE.CREATE name [MAX max]",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "QUEUE.PUSH",
+    "syntax": "QUEUE.PUSH name item",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "QUEUE.POP",
+    "syntax": "QUEUE.POP name [TIMEOUT timeout]",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "QUEUE.PEEK",
+    "syntax": "QUEUE.PEEK name",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "QUEUE.LEN",
+    "syntax": "QUEUE.LEN name",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "QUEUE.CLEAR",
+    "syntax": "QUEUE.CLEAR name",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "STACK.CREATE",
+    "syntax": "STACK.CREATE name [MAX max]",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "STACK.PUSH",
+    "syntax": "STACK.PUSH name item",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "STACK.POP",
+    "syntax": "STACK.POP name",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "STACK.PEEK",
+    "syntax": "STACK.PEEK name",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "STACK.LEN",
+    "syntax": "STACK.LEN name",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "STACK.CLEAR",
+    "syntax": "STACK.CLEAR name",
+    "category": "Queue & Stack",
+    "section": "Event Commands"
+  },
+  {
+    "name": "RL.CREATE",
+    "syntax": "RL.CREATE name rate interval [BURST burst]",
+    "category": "Rate Limiting",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "RL.ALLOW",
+    "syntax": "RL.ALLOW name [COST cost]",
+    "category": "Rate Limiting",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "RL.GET",
+    "syntax": "RL.GET name",
+    "category": "Rate Limiting",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "RL.DELETE",
+    "syntax": "RL.DELETE name",
+    "category": "Rate Limiting",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "RL.RESET",
+    "syntax": "RL.RESET name",
+    "category": "Rate Limiting",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "LOCK.TRY",
+    "syntax": "LOCK.TRY key ttl",
+    "category": "Distributed Locks",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "LOCK.ACQUIRE",
+    "syntax": "LOCK.ACQUIRE key ttl [RETRY retry] [DELAY delay]",
+    "category": "Distributed Locks",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "LOCK.RELEASE",
+    "syntax": "LOCK.RELEASE key",
+    "category": "Distributed Locks",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "LOCK.RENEW",
+    "syntax": "LOCK.RENEW key ttl",
+    "category": "Distributed Locks",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "LOCK.INFO",
+    "syntax": "LOCK.INFO key",
+    "category": "Distributed Locks",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "LOCK.ISLOCKED",
+    "syntax": "LOCK.ISLOCKED key",
+    "category": "Distributed Locks",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "ID.CREATE",
+    "syntax": "ID.CREATE name [START start] [STEP step]",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "ID.NEXT",
+    "syntax": "ID.NEXT name",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "ID.NEXTN",
+    "syntax": "ID.NEXTN name count",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "ID.CURRENT",
+    "syntax": "ID.CURRENT name",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "ID.SET",
+    "syntax": "ID.SET name value",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "ID.DELETE",
+    "syntax": "ID.DELETE name",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "SNOWFLAKE.NEXT",
+    "syntax": "SNOWFLAKE.NEXT [NODE node]",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "SNOWFLAKE.PARSE",
+    "syntax": "SNOWFLAKE.PARSE id",
+    "category": "ID Generation",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.LOG",
+    "syntax": "AUDIT.LOG command key [DETAILS details]",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.GET",
+    "syntax": "AUDIT.GET [COUNT count]",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.GETRANGE",
+    "syntax": "AUDIT.GETRANGE start end",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.GETBYCMD",
+    "syntax": "AUDIT.GETBYCMD command [COUNT count]",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.GETBYKEY",
+    "syntax": "AUDIT.GETBYKEY key [COUNT count]",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.CLEAR",
+    "syntax": "AUDIT.CLEAR [BEFORE timestamp]",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.COUNT",
+    "syntax": "AUDIT.COUNT [COMMAND command] [KEY key]",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.STATS",
+    "syntax": "AUDIT.STATS",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.ENABLE",
+    "syntax": "AUDIT.ENABLE",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "AUDIT.DISABLE",
+    "syntax": "AUDIT.DISABLE",
+    "category": "Audit Logging",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.CREATE",
+    "syntax": "FLAG.CREATE name [DEFAULT default]",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.DELETE",
+    "syntax": "FLAG.DELETE name",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.GET",
+    "syntax": "FLAG.GET name",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.ENABLE",
+    "syntax": "FLAG.ENABLE name",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.DISABLE",
+    "syntax": "FLAG.DISABLE name",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.TOGGLE",
+    "syntax": "FLAG.TOGGLE name",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.ISENABLED",
+    "syntax": "FLAG.ISENABLED name",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.LIST",
+    "syntax": "FLAG.LIST [pattern]",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.LISTENABLED",
+    "syntax": "FLAG.LISTENABLED",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.ADDVARIANT",
+    "syntax": "FLAG.ADDVARIANT name variant value [WEIGHT weight]",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.GETVARIANT",
+    "syntax": "FLAG.GETVARIANT name [USER user]",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "FLAG.ADDRULE",
+    "syntax": "FLAG.ADDRULE name rule value",
+    "category": "Feature Flags",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.GET",
+    "syntax": "COUNTER.GET name",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.SET",
+    "syntax": "COUNTER.SET name value",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.INCR",
+    "syntax": "COUNTER.INCR name [BY increment]",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.DECR",
+    "syntax": "COUNTER.DECR name [BY decrement]",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.INCRBY",
+    "syntax": "COUNTER.INCRBY name increment",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.DECRBY",
+    "syntax": "COUNTER.DECRBY name decrement",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.DELETE",
+    "syntax": "COUNTER.DELETE name",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.LIST",
+    "syntax": "COUNTER.LIST [pattern]",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.GETALL",
+    "syntax": "COUNTER.GETALL [pattern]",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.RESET",
+    "syntax": "COUNTER.RESET name",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "COUNTER.RESETALL",
+    "syntax": "COUNTER.RESETALL [pattern]",
+    "category": "Counters",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "BACKUP.CREATE",
+    "syntax": "BACKUP.CREATE [NAME name] [TYPE type]",
+    "category": "Backup",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "BACKUP.RESTORE",
+    "syntax": "BACKUP.RESTORE name [OPTIONS options]",
+    "category": "Backup",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "BACKUP.LIST",
+    "syntax": "BACKUP.LIST [pattern]",
+    "category": "Backup",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "BACKUP.DELETE",
+    "syntax": "BACKUP.DELETE name",
+    "category": "Backup",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "MEMORY.TRIM",
+    "syntax": "MEMORY.TRIM",
+    "category": "Memory Management",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "MEMORY.FRAG",
+    "syntax": "MEMORY.FRAG",
+    "category": "Memory Management",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "MEMORY.PURGE",
+    "syntax": "MEMORY.PURGE",
+    "category": "Memory Management",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "MEMORY.ALLOC",
+    "syntax": "MEMORY.ALLOC size",
+    "category": "Memory Management",
+    "section": "Utility Commands"
+  },
+  {
+    "name": "CIRCUITBREAKER.CREATE",
+    "syntax": "CIRCUITBREAKER.CREATE name [THRESHOLD threshold] [TIMEOUT timeout]",
+    "category": "Circuit Breaker",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CIRCUITBREAKER.STATE",
+    "syntax": "CIRCUITBREAKER.STATE name",
+    "category": "Circuit Breaker",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CIRCUITBREAKER.TRIP",
+    "syntax": "CIRCUITBREAKER.TRIP name",
+    "category": "Circuit Breaker",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CIRCUITBREAKER.RESET",
+    "syntax": "CIRCUITBREAKER.RESET name",
+    "category": "Circuit Breaker",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "RATELIMIT.CREATE",
+    "syntax": "RATELIMIT.CREATE name rate window",
+    "category": "Rate Limit",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "RATELIMIT.CHECK",
+    "syntax": "RATELIMIT.CHECK name [COST cost]",
+    "category": "Rate Limit",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "RATELIMIT.RESET",
+    "syntax": "RATELIMIT.RESET name",
+    "category": "Rate Limit",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "RATELIMIT.DELETE",
+    "syntax": "RATELIMIT.DELETE name",
+    "category": "Rate Limit",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CACHE.LOCK",
+    "syntax": "CACHE.LOCK key ttl",
+    "category": "Cache Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CACHE.UNLOCK",
+    "syntax": "CACHE.UNLOCK key",
+    "category": "Cache Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CACHE.LOCKED",
+    "syntax": "CACHE.LOCKED key",
+    "category": "Cache Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CACHE.REFRESH",
+    "syntax": "CACHE.REFRESH key",
+    "category": "Cache Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "NET.WHOIS",
+    "syntax": "NET.WHOIS domain",
+    "category": "Network",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "NET.DNS",
+    "syntax": "NET.DNS domain [TYPE type]",
+    "category": "Network",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "NET.PING",
+    "syntax": "NET.PING host [COUNT count]",
+    "category": "Network",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "NET.PORT",
+    "syntax": "NET.PORT host port [TIMEOUT timeout]",
+    "category": "Network",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.PUSH",
+    "syntax": "ARRAY.PUSH key value [value ...]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.POP",
+    "syntax": "ARRAY.POP key",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.SHIFT",
+    "syntax": "ARRAY.SHIFT key",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.UNSHIFT",
+    "syntax": "ARRAY.UNSHIFT key value [value ...]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.SLICE",
+    "syntax": "ARRAY.SLICE key start end",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.SPLICE",
+    "syntax": "ARRAY.SPLICE key start deleteCount [value ...]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.REVERSE",
+    "syntax": "ARRAY.REVERSE key",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.SORT",
+    "syntax": "ARRAY.SORT key [ASC|DESC]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.UNIQUE",
+    "syntax": "ARRAY.UNIQUE key",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.FLATTEN",
+    "syntax": "ARRAY.FLATTEN key [DEPTH depth]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.MERGE",
+    "syntax": "ARRAY.MERGE key1 key2 [OUT out]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.INTERSECT",
+    "syntax": "ARRAY.INTERSECT key1 key2 [OUT out]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.DIFF",
+    "syntax": "ARRAY.DIFF key1 key2 [OUT out]",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.INDEXOF",
+    "syntax": "ARRAY.INDEXOF key value",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.LASTINDEXOF",
+    "syntax": "ARRAY.LASTINDEXOF key value",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "ARRAY.INCLUDES",
+    "syntax": "ARRAY.INCLUDES key value",
+    "category": "Array Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.KEYS",
+    "syntax": "OBJECT.KEYS key",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.VALUES",
+    "syntax": "OBJECT.VALUES key",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.ENTRIES",
+    "syntax": "OBJECT.ENTRIES key",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.FROMENTRIES",
+    "syntax": "OBJECT.FROMENTRIES entries",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.MERGE",
+    "syntax": "OBJECT.MERGE key1 key2 [OUT out]",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.PICK",
+    "syntax": "OBJECT.PICK key fields...",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.OMIT",
+    "syntax": "OBJECT.OMIT key fields...",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.HAS",
+    "syntax": "OBJECT.HAS key field",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.GET",
+    "syntax": "OBJECT.GET key field [DEFAULT default]",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.SET",
+    "syntax": "OBJECT.SET key field value",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "OBJECT.DELETE",
+    "syntax": "OBJECT.DELETE key field",
+    "category": "Object Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.ADD",
+    "syntax": "MATH.ADD a b",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.SUB",
+    "syntax": "MATH.SUB a b",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.MUL",
+    "syntax": "MATH.MUL a b",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.DIV",
+    "syntax": "MATH.DIV a b",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.MOD",
+    "syntax": "MATH.MOD a b",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.POW",
+    "syntax": "MATH.POW base exp",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.SQRT",
+    "syntax": "MATH.SQRT x",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.ABS",
+    "syntax": "MATH.ABS x",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.MIN",
+    "syntax": "MATH.MIN a b [c ...]",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.MAX",
+    "syntax": "MATH.MAX a b [c ...]",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.FLOOR",
+    "syntax": "MATH.FLOOR x",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.CEIL",
+    "syntax": "MATH.CEIL x",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.ROUND",
+    "syntax": "MATH.ROUND x [DECIMALS decimals]",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.RANDOM",
+    "syntax": "MATH.RANDOM [MIN min] [MAX max]",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.SUM",
+    "syntax": "MATH.SUM key",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.AVG",
+    "syntax": "MATH.AVG key",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.MEDIAN",
+    "syntax": "MATH.MEDIAN key",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "MATH.STDDEV",
+    "syntax": "MATH.STDDEV key",
+    "category": "Math Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "GEO.ENCODE",
+    "syntax": "GEO.ENCODE lat lon [PRECISION precision]",
+    "category": "Geo Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "GEO.DECODE",
+    "syntax": "GEO.DECODE hash",
+    "category": "Geo Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "GEO.DISTANCE",
+    "syntax": "GEO.DISTANCE lat1 lon1 lat2 lon2 [UNIT unit]",
+    "category": "Geo Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "GEO.BOUNDINGBOX",
+    "syntax": "GEO.BOUNDINGBOX lat lon radius [UNIT unit]",
+    "category": "Geo Operations",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CAPTCHA.GENERATE",
+    "syntax": "CAPTCHA.GENERATE [WIDTH width] [HEIGHT height] [LENGTH length]",
+    "category": "Captcha",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "CAPTCHA.VERIFY",
+    "syntax": "CAPTCHA.VERIFY id code",
+    "category": "Captcha",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "SEQUENCE.NEXT",
+    "syntax": "SEQUENCE.NEXT name",
+    "category": "Sequence",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "SEQUENCE.CURRENT",
+    "syntax": "SEQUENCE.CURRENT name",
+    "category": "Sequence",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "SEQUENCE.RESET",
+    "syntax": "SEQUENCE.RESET name [VALUE value]",
+    "category": "Sequence",
+    "section": "Integration Commands"
+  },
+  {
+    "name": "SEQUENCE.SET",
+    "syntax": "SEQUENCE.SET name value",
+    "category": "Sequence",
+    "section": "Integration Commands"
+  }
+]
