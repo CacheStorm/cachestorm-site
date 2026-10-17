@@ -39,7 +39,7 @@ export default function Benchmarks() {
         </p>
       </header>
       <div className="page-section">
-        <div className="benchmark-context">
+        <div className="benchmark-context panel-intro">
           <h2>Context is part of the result.</h2>
           <p>
             These are repository-reported measurements from the pinned upstream
@@ -58,69 +58,72 @@ export default function Benchmarks() {
             Read the original results ↗
           </a>
         </div>
-        <section className="benchmark-section">
-          <p className="eyebrow">01 / INSIDE THE ENGINE</p>
-          <h2>Direct storage operations.</h2>
-          <p>
-            In-memory store benchmarks. No TCP connection, protocol parsing or
-            network round trip.
-          </p>
-          <div className="table-scroll">
-            <table className="benchmark-table">
-              <thead>
-                <tr>
-                  <th>Operation</th>
-                  <th>Operations / second</th>
-                  <th>Time / operation</th>
-                  <th>Allocations / operation</th>
-                </tr>
-              </thead>
-              <tbody>
-                {storage.map((row) => (
-                  <tr key={row[0]}>
-                    {row.map((v, i) => (
-                      <td key={i}>{v}</td>
-                    ))}
+        <div className="panel-grid">
+          <section className="benchmark-section">
+            <p className="eyebrow">01 / INSIDE THE ENGINE</p>
+            <h2>Direct storage operations.</h2>
+            <p>
+              In-memory store benchmarks. No TCP connection, protocol parsing or
+              network round trip.
+            </p>
+            <div className="table-scroll">
+              <table className="benchmark-table">
+                <thead>
+                  <tr>
+                    <th>Operation</th>
+                    <th>Operations / second</th>
+                    <th>Time / operation</th>
+                    <th>Allocations / operation</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-        <section className="benchmark-section">
-          <p className="eyebrow">02 / THE COMPLETE CONNECTION</p>
-          <h2>End-to-end TCP operations.</h2>
-          <p>
-            A separate workload including the full TCP round trip. These results
-            describe a different measurement from direct storage calls.
-          </p>
-          <div className="table-scroll">
-            <table className="benchmark-table">
-              <thead>
-                <tr>
-                  <th>Operation</th>
-                  <th>Operations / second</th>
-                  <th>Reported time / operation</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tcp.map((row) => (
-                  <tr key={row[0]}>
-                    {row.map((v, i) => (
-                      <td key={i}>{v}</td>
-                    ))}
+                </thead>
+                <tbody>
+                  {storage.map((row) => (
+                    <tr key={row[0]}>
+                      {row.map((v, i) => (
+                        <td key={i}>{v}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section className="benchmark-section">
+            <p className="eyebrow">02 / THE COMPLETE CONNECTION</p>
+            <h2>End-to-end TCP operations.</h2>
+            <p>
+              A separate workload including the full TCP round trip. These
+              results describe a different measurement from direct storage
+              calls.
+            </p>
+            <div className="table-scroll">
+              <table className="benchmark-table">
+                <thead>
+                  <tr>
+                    <th>Operation</th>
+                    <th>Operations / second</th>
+                    <th>Reported time / operation</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="benchmark-fineprint">
-            Values are reproduced as reported upstream, including rounding.
-            Operations per second and listed timings are not always exact
-            reciprocals. Treat them as upstream observations and reproduce your
-            own workload.
-          </p>
-        </section>
+                </thead>
+                <tbody>
+                  {tcp.map((row) => (
+                    <tr key={row[0]}>
+                      {row.map((v, i) => (
+                        <td key={i}>{v}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="benchmark-fineprint">
+              Values are reproduced as reported upstream, including rounding.
+              Operations per second and listed timings are not always exact
+              reciprocals. Treat them as upstream observations and reproduce
+              your own workload.
+            </p>
+          </section>
+        </div>
         <div className="benchmark-method">
           <div>
             <p className="eyebrow">03 / MAKE IT YOUR MEASUREMENT</p>

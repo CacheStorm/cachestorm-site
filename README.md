@@ -51,6 +51,14 @@ When updating product content, pin a new upstream commit, recheck configuration 
 - Copy errors are announced, and users can manually select code.
 - Motion respects `prefers-reduced-motion`. Content is server-rendered and remains visible without animation.
 
+## Responsive layout
+
+The shared `.container` uses `--layout-max: 1728px` and viewport-scaled `--page-gutter`. Header, page sections and footer use the same rail. At 1440px, gutters are approximately 48px; at 1920px and above they cap at 64px. Mobile and tablet gutter tokens retain their existing 22px and 30px values.
+
+Reading measures are separate from the outer rail: prose stays within 70ch, while code, tables and reference panels can use the available width. Shared `.panel-grid` and `.panel-intro` patterns handle wider data sections. At 1440px, feature cards use four tracks, the command explorer uses two columns, and documentation cards use three columns. Hero type scales against its own column with a bounded container-relative size.
+
+Validate changes at 375, 768, 1024, 1440, 1920 and 2560px, including internal documentation pages, open menus and command details. Keep horizontal scrolling inside explicit table/code wrappers; the document and outer containers must remain within the viewport.
+
 ## GitHub Pages
 
 `.github/workflows/pages.yml` checks and builds pull requests, and publishes `main` using the GitHub Pages artifact workflow. Repository Settings → Pages must use **GitHub Actions**. The custom domain is **cachestorm.com**; the tracked `public/CNAME` is copied to the export.

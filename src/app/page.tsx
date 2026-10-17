@@ -200,7 +200,7 @@ export default function Home() {
             </p>
             <span className="feature-tag">TLS + per-user ACL</span>
           </Reveal>
-          <Reveal className="feature-small">
+          <Reveal className="feature-small feature-wide">
             <div className="feature-icon">
               <Database />
             </div>
@@ -215,7 +215,7 @@ export default function Home() {
             </p>
             <span className="feature-tag">Your data. Your decision.</span>
           </Reveal>
-          <Reveal className="feature-small">
+          <Reveal className="feature-small feature-wide">
             <div className="feature-icon">
               <Zap />
             </div>
