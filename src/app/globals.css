@@ -479,6 +479,38 @@ kbd {
   font-size: 14px;
 }
 /* Hero and engine */
+.hero-scene {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background:
+    radial-gradient(
+      ellipse at 80% 38%,
+      light-dark(#dbeeff60, #173c652e),
+      transparent 62%
+    ),
+    var(--bg);
+}
+.hero-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  animation: scene-arrive 1.2s ease-out both;
+}
+.hero-scene[data-scene-paused="true"] .engine-art * {
+  animation-play-state: paused;
+}
+@keyframes scene-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);

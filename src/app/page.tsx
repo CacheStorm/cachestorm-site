@@ -13,6 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { EngineArt } from "@/components/engine-art";
+import { HeroBackground } from "@/components/hero-background";
 import { Reveal } from "@/components/ui";
 import {
   HomeExamples,
@@ -24,64 +25,71 @@ import { REPO, VERSION } from "@/lib/site";
 export default function Home() {
   return (
     <>
-      <section className="hero container">
-        <div className="hero-copy">
-          <Reveal>
-            <Link href="/changelog/" className="release-pill">
-              <span className="status-dot" />v{VERSION}
-              <span className="pill-divider" />
-              Small binary. Serious possibilities.
-              <ArrowRight size={14} />
-            </Link>
-            <h1>
-              Your data.
-              <br />
-              At the speed
-              <br />
-              of <em>thought.</em>
-            </h1>
-            <p className="hero-lead">Less waiting. More building.</p>
-            <p className="hero-description">
-              A Redis-compatible in-memory data store written in Go. Your
-              favorite clients, a powerful engine, and everything you need in
-              one binary.
-            </p>
-            <div className="button-row">
-              <Link href="/docs/getting-started/" className="button primary">
-                Start building
-                <ArrowRight size={17} />
+      <section
+        className="hero-scene"
+        data-hero-scene
+        aria-labelledby="hero-title"
+      >
+        <HeroBackground />
+        <div className="hero container">
+          <div className="hero-copy">
+            <Reveal>
+              <Link href="/changelog/" className="release-pill">
+                <span className="status-dot" />v{VERSION}
+                <span className="pill-divider" />
+                Small binary. Serious possibilities.
+                <ArrowRight size={14} />
               </Link>
-              <a
-                href={REPO}
-                target="_blank"
-                rel="noreferrer"
-                className="button secondary"
-              >
-                <Github size={17} />
-                View source
-                <ArrowUpRight size={15} />
-              </a>
-            </div>
-            <InstallTabs compact />
-            <div className="hero-promises">
-              <span>
-                <Check />
-                Pure Go. No CGO.
-              </span>
-              <span>
-                <Check />
-                Apache 2.0
-              </span>
-              <span>
-                <Check />
-                Your infrastructure
-              </span>
-            </div>
+              <h1 id="hero-title">
+                Your data.
+                <br />
+                At the speed
+                <br />
+                of <em>thought.</em>
+              </h1>
+              <p className="hero-lead">Less waiting. More building.</p>
+              <p className="hero-description">
+                A Redis-compatible in-memory data store written in Go. Your
+                favorite clients, a powerful engine, and everything you need in
+                one binary.
+              </p>
+              <div className="button-row">
+                <Link href="/docs/getting-started/" className="button primary">
+                  Start building
+                  <ArrowRight size={17} />
+                </Link>
+                <a
+                  href={REPO}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button secondary"
+                >
+                  <Github size={17} />
+                  View source
+                  <ArrowUpRight size={15} />
+                </a>
+              </div>
+              <InstallTabs compact />
+              <div className="hero-promises">
+                <span>
+                  <Check />
+                  Pure Go. No CGO.
+                </span>
+                <span>
+                  <Check />
+                  Apache 2.0
+                </span>
+                <span>
+                  <Check />
+                  Your infrastructure
+                </span>
+              </div>
+            </Reveal>
+          </div>
+          <Reveal className="hero-visual" delay={0.12}>
+            <EngineArt />
           </Reveal>
         </div>
-        <Reveal className="hero-visual" delay={0.12}>
-          <EngineArt />
-        </Reveal>
       </section>
       <div className="capability-strip">
         <div className="container">
