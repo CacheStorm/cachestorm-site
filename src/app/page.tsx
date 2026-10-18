@@ -13,7 +13,6 @@ import {
   Zap,
 } from "lucide-react";
 import { EngineArt } from "@/components/engine-art";
-import { HeroBackground } from "@/components/hero-background";
 import { Reveal } from "@/components/ui";
 import {
   HomeExamples,
@@ -25,12 +24,7 @@ import { REPO, VERSION } from "@/lib/site";
 export default function Home() {
   return (
     <>
-      <section
-        className="hero-scene"
-        data-hero-scene
-        aria-labelledby="hero-title"
-      >
-        <HeroBackground />
+      <section className="hero-scene" aria-labelledby="hero-title">
         <div className="hero container">
           <div className="hero-copy">
             <Reveal>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import { SiteBackground } from "@/components/site-background";
 import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://cachestorm.com"),
@@ -39,6 +40,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <SiteBackground />
         <a href="#main" className="skip-link">
           Skip to content
         </a>

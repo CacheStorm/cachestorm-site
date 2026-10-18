@@ -34,6 +34,11 @@
   --measure-prose: 70ch;
   --measure-lead: 58ch;
   --measure-copy: 48ch;
+  --field-line: light-dark(#377bb52b, #6a9fe027);
+  --field-node: light-dark(#2479bf70, #7dbfff66);
+  --field-pulse: light-dark(#1765cd99, #7ab8ffb3);
+  --field-wash: light-dark(#42a3ec0a, #459eff08);
+  --field-band: color-mix(in srgb, var(--soft) 65%, transparent);
 }
 :root[data-theme="light"] {
   color-scheme: light;
@@ -49,6 +54,7 @@ html {
   scroll-padding-top: 110px;
 }
 body {
+  isolation: isolate;
   margin: 0;
   background: var(--bg);
   color: var(--ink);
@@ -479,29 +485,64 @@ kbd {
   font-size: 14px;
 }
 /* Hero and engine */
-.hero-scene {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;
-  background:
-    radial-gradient(
-      ellipse at 80% 38%,
-      light-dark(#dbeeff60, #173c652e),
-      transparent 62%
-    ),
-    var(--bg);
-}
-.hero-background {
-  position: absolute;
+.site-background {
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
   z-index: -1;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse at 85% 20%,
+    var(--field-wash),
+    transparent 70%
+  );
   animation: scene-arrive 1.2s ease-out both;
 }
-.hero-scene[data-scene-paused="true"] .engine-art * {
-  animation-play-state: paused;
+.field-routes {
+  stroke: var(--field-line);
+  stroke-width: 0.8;
+}
+.field-shapes {
+  stroke: var(--field-node);
+  stroke-width: 0.85;
+}
+.field-tail {
+  opacity: 0.45;
+}
+.field-links {
+  stroke: var(--field-node);
+  stroke-width: 0.85;
+}
+.field-ripple {
+  stroke: var(--field-pulse);
+  stroke-width: 1.15;
+}
+.field-spark {
+  fill: var(--field-pulse);
+  stroke: none;
+}
+.field-trail {
+  stroke: var(--field-node);
+  stroke-width: 0.65;
+}
+.site-background :is(path, circle) {
+  transition:
+    stroke 0.4s,
+    fill 0.4s;
+}
+:is(.setup-section, .performance-section) {
+  background: linear-gradient(
+    transparent,
+    var(--field-band) 48px,
+    var(--field-band) calc(100% - 48px),
+    transparent
+  );
+}
+.hero-scene {
+  position: relative;
+  overflow: clip;
 }
 @keyframes scene-arrive {
   from {
@@ -723,7 +764,7 @@ kbd {
 }
 .capability-strip {
   border-block: 1px solid var(--line);
-  background: var(--soft);
+  background: var(--field-band);
 }
 .capability-strip > .container {
   display: flex;
@@ -889,7 +930,6 @@ kbd {
 }
 /* Getting started */
 .setup-section {
-  background: var(--soft);
   border-block: 1px solid var(--line);
 }
 .setup-grid {
@@ -1166,7 +1206,6 @@ kbd {
 /* Benchmarks and use cases */
 .performance-section {
   padding-block: var(--section-space);
-  background: var(--soft);
   border-block: 1px solid var(--line);
 }
 .metric-grid {
@@ -1400,7 +1439,7 @@ kbd {
 /* Footer and the studio */
 .site-footer {
   border-top: 1px solid var(--line);
-  background: var(--soft);
+  background: linear-gradient(transparent, var(--field-band) 64px);
   padding-top: 65px;
 }
 .footer-top {

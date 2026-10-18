@@ -1,9 +1,14 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { HERO_FIELD, HeroField, routePoint } from "../src/lib/hero-field.ts";
+import {
+  SITE_FIELD,
+  SiteField,
+  projectY,
+  routePoint,
+} from "../src/lib/site-field.ts";
 
 function scene(width = 1440, height = 820) {
-  const field = new HeroField();
+  const field = new SiteField();
   field.resize(width, height);
   return field;
 }
@@ -14,10 +19,10 @@ function advance(field, seconds, fps = 60) {
 test("packet budgets remain bounded from mobile through 4K", () => {
   for (const width of [375, 768, 1024, 1440, 1920, 2560, 3840]) {
     const field = scene(width);
-    assert.ok(field.packets.length >= HERO_FIELD.packets.min);
+    assert.ok(field.packets.length >= SITE_FIELD.packets.min);
     assert.ok(
       field.packets.length <=
-        (width <= 680 ? HERO_FIELD.packets.mobileMax : HERO_FIELD.packets.max),
+        (width <= 680 ? SITE_FIELD.packets.mobileMax : SITE_FIELD.packets.max),
     );
     assert.ok(
       field.routes.every(
@@ -34,12 +39,12 @@ test("a click storm stays bounded and every transient expires", () => {
       field.burst(200, 200);
       field.move(100 + (i % 200), 200);
     }
-    assert.equal(field.ripples.length, HERO_FIELD.ripples.max);
+    assert.equal(field.ripples.length, SITE_FIELD.ripples.max);
     assert.ok(
       field.sparks.length <=
-        (field.mobile ? HERO_FIELD.sparks.mobileMax : HERO_FIELD.sparks.max),
+        (field.mobile ? SITE_FIELD.sparks.mobileMax : SITE_FIELD.sparks.max),
     );
-    assert.ok(field.trails.length <= HERO_FIELD.trails.max);
+    assert.ok(field.trails.length <= SITE_FIELD.trails.max);
     assert.ok(
       field.ripples.every(
         (ripple) => ripple.variant >= 0 && ripple.variant <= 2,
@@ -93,7 +98,7 @@ test("pointer force stays local and settles after leaving", () => {
   const far = field.packets.filter((packet) => {
     const p = routePoint(field.routes[packet.route], packet.distance);
     return (
-      Math.hypot(p.x - near.x, p.y - near.y) > HERO_FIELD.pointerRadius + 50
+      Math.hypot(p.x - near.x, p.y - near.y) > SITE_FIELD.pointerRadius + 50
     );
   });
   assert.ok(far.length > 0);
@@ -139,4 +144,25 @@ test("out-of-bounds taps do not create effects", () => {
   ])
     field.burst(x, y);
   assert.equal(field.ripples.length + field.sparks.length, 0);
+});
+
+test("scroll projection preserves route geometry and recycles beyond the viewport", () => {
+  const field = scene();
+  for (const route of field.routes) {
+    for (const scroll of [0, 400, 5000, 100000]) {
+      const first = projectY(route, route.points[0].y, scroll, field.height);
+      assert.ok(
+        first >= -SITE_FIELD.overscan &&
+          first <= field.height + SITE_FIELD.overscan,
+      );
+      const p = route.points[2];
+      assert.ok(
+        Math.abs(
+          projectY(route, p.y, scroll, field.height) -
+            first -
+            (p.y - route.points[0].y),
+        ) < 0.0001,
+      );
+    }
+  }
 });

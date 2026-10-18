@@ -1,13 +1,15 @@
 // All distances are CSS pixels and all durations are seconds.
-export const HERO_FIELD = {
-  maxDpr: 1.75,
-  maxPixels: 4_000_000,
+export const SITE_FIELD = {
   mobileWidth: 680,
-  areaPerPacket: 24_000,
-  packets: { min: 20, max: 84, mobileMax: 26 },
-  lanes: { min: 9, max: 20 },
+  areaPerPacket: 34_000,
+  packets: { min: 12, max: 64, mobileMax: 16 },
+  lanes: { min: 7, max: 16, mobileMax: 8 },
   fps: { active: 60, idle: 24, mobile: 30 },
-  speed: 27,
+  speed: 16,
+  parallax: 0.07,
+  overscan: 90,
+  symbolScale: 3.8,
+  quietRegions: 16,
   idleAfter: 5,
   pointerRadius: 170,
   displacement: 30,
@@ -15,20 +17,6 @@ export const HERO_FIELD = {
   ripples: { max: 6, life: 1.8, radius: 235, mobileRadius: 145 },
   sparks: { max: 60, mobileMax: 24, perClick: 10, life: 1.1 },
   trails: { max: 12, life: 0.65, spacing: 22 },
-  colors: {
-    light: {
-      line: [49, 112, 179],
-      packet: [15, 107, 209],
-      glow: [28, 135, 220],
-      opacity: 0.72,
-    },
-    dark: {
-      line: [72, 125, 186],
-      packet: [116, 201, 255],
-      glow: [70, 155, 245],
-      opacity: 1,
-    },
-  },
 } as const;
 
 export type Point = { x: number; y: number };
@@ -67,12 +55,32 @@ export function routePoint(route: Route, distance: number) {
   };
 }
 
-export class HeroField {
+// Wrap an entire route outside the viewport, so recycling never shows a seam.
+export function projectY(
+  route: Route,
+  y: number,
+  scroll: number,
+  height: number,
+) {
+  const span = height + SITE_FIELD.overscan * 2;
+  const anchor = route.points[0].y;
+  const shifted = anchor - scroll * route.depth * SITE_FIELD.parallax;
+  return (
+    y +
+    (((((shifted + SITE_FIELD.overscan) % span) + span) % span) -
+      SITE_FIELD.overscan) -
+    anchor
+  );
+}
+
+export class SiteField {
   width = 0;
   height = 0;
   mobile = false;
   time = 0;
   intensity = 0;
+  scroll = 0;
+  scrollTarget = 0;
   pointer = { x: -1000, y: -1000, inside: false, strength: 0 };
   routes: Route[] = [];
   packets: Packet[] = [];
@@ -87,14 +95,18 @@ export class HeroField {
   resize(width: number, height: number) {
     this.width = Math.max(1, width);
     this.height = Math.max(1, height);
-    this.mobile = width <= HERO_FIELD.mobileWidth;
+    this.mobile = width <= SITE_FIELD.mobileWidth;
     let seed = 6380;
     const random = () => {
       seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
       return seed / 4294967296;
     };
     const lanes = Math.round(
-      clamp(height / 65, HERO_FIELD.lanes.min, HERO_FIELD.lanes.max),
+      clamp(
+        height / 65,
+        SITE_FIELD.lanes.min,
+        this.mobile ? SITE_FIELD.lanes.mobileMax : SITE_FIELD.lanes.max,
+      ),
     );
     this.routes = Array.from({ length: lanes }, (_, lane) => {
       const y = ((lane + 0.5) / lanes) * height;
@@ -127,9 +139,9 @@ export class HeroField {
     });
     const count = Math.round(
       clamp(
-        (width * height) / HERO_FIELD.areaPerPacket,
-        HERO_FIELD.packets.min,
-        this.mobile ? HERO_FIELD.packets.mobileMax : HERO_FIELD.packets.max,
+        (width * height) / SITE_FIELD.areaPerPacket,
+        SITE_FIELD.packets.min,
+        this.mobile ? SITE_FIELD.packets.mobileMax : SITE_FIELD.packets.max,
       ),
     );
     this.packets = Array.from({ length: count }, (_, i) => {
@@ -137,7 +149,7 @@ export class HeroField {
       return {
         route,
         distance: random() * this.routes[route].length,
-        speed: HERO_FIELD.speed * (0.6 + random() * 1.1),
+        speed: SITE_FIELD.speed * (0.6 + random() * 1.1),
         size: 2 + random() * 2.6,
         offset: { x: 0, y: 0 },
       };
@@ -152,10 +164,10 @@ export class HeroField {
     this.lastInteraction = this.time;
     if (
       Math.hypot(x - this.lastTrail.x, y - this.lastTrail.y) >=
-      HERO_FIELD.trails.spacing
+      SITE_FIELD.trails.spacing
     ) {
-      this.trails.push({ x, y, age: 0, life: HERO_FIELD.trails.life });
-      this.trails = this.trails.slice(-HERO_FIELD.trails.max);
+      this.trails.push({ x, y, age: 0, life: SITE_FIELD.trails.life });
+      this.trails = this.trails.slice(-SITE_FIELD.trails.max);
       this.lastTrail = { x, y };
     }
   }
@@ -171,9 +183,9 @@ export class HeroField {
     const variant = rapid ? 2 : this.clickSequence++ % 2;
     this.lastClick = this.time;
     this.lastInteraction = this.time;
-    this.ripples.push({ x, y, age: 0, life: HERO_FIELD.ripples.life, variant });
-    this.ripples = this.ripples.slice(-HERO_FIELD.ripples.max);
-    const count = this.mobile ? 6 : HERO_FIELD.sparks.perClick;
+    this.ripples.push({ x, y, age: 0, life: SITE_FIELD.ripples.life, variant });
+    this.ripples = this.ripples.slice(-SITE_FIELD.ripples.max);
+    const count = this.mobile ? 6 : SITE_FIELD.sparks.perClick;
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2 + variant * 0.3;
       const speed = 40 + (i % 3) * 24;
@@ -183,11 +195,11 @@ export class HeroField {
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         age: 0,
-        life: HERO_FIELD.sparks.life,
+        life: SITE_FIELD.sparks.life,
       });
     }
     this.sparks = this.sparks.slice(
-      -(this.mobile ? HERO_FIELD.sparks.mobileMax : HERO_FIELD.sparks.max),
+      -(this.mobile ? SITE_FIELD.sparks.mobileMax : SITE_FIELD.sparks.max),
     );
   }
 
@@ -208,8 +220,9 @@ export class HeroField {
     // A suspended tab or a dropped frame must never advance an entire scene.
     const dt = clamp(elapsed, 0, 0.05);
     this.time += dt;
-    const awake = this.time - this.lastInteraction < HERO_FIELD.idleAfter;
+    const awake = this.time - this.lastInteraction < SITE_FIELD.idleAfter;
     const mix = 1 - Math.exp(-dt * 5);
+    this.scroll += (this.scrollTarget - this.scroll) * mix;
     this.intensity += ((awake ? 1 : 0) - this.intensity) * mix;
     this.pointer.strength +=
       ((this.pointer.inside && awake ? 1 : 0) - this.pointer.strength) * mix;
@@ -220,19 +233,20 @@ export class HeroField {
         route.length;
       const p = routePoint(route, packet.distance);
       const dx = p.x - this.pointer.x;
-      const dy = p.y - this.pointer.y;
+      const screenY = projectY(route, p.y, this.scroll, this.height);
+      const dy = screenY - this.pointer.y;
       const distance = Math.hypot(dx, dy);
       const influence =
-        clamp(1 - distance / HERO_FIELD.pointerRadius) ** 2 *
+        clamp(1 - distance / SITE_FIELD.pointerRadius) ** 2 *
         this.pointer.strength;
       let ox =
-        (dx / Math.max(1, distance)) * influence * HERO_FIELD.displacement;
+        (dx / Math.max(1, distance)) * influence * SITE_FIELD.displacement;
       let oy =
-        (dy / Math.max(1, distance)) * influence * HERO_FIELD.displacement;
+        (dy / Math.max(1, distance)) * influence * SITE_FIELD.displacement;
       for (const ripple of this.ripples) {
         const radius = easeOut(ripple.age / ripple.life) * this.rippleRadius;
         const rx = p.x - ripple.x;
-        const ry = p.y - ripple.y;
+        const ry = screenY - ripple.y;
         const rd = Math.hypot(rx, ry);
         const force =
           clamp(1 - Math.abs(rd - radius) / 38) *
@@ -259,7 +273,7 @@ export class HeroField {
 
   get rippleRadius() {
     return this.mobile
-      ? HERO_FIELD.ripples.mobileRadius
-      : HERO_FIELD.ripples.radius;
+      ? SITE_FIELD.ripples.mobileRadius
+      : SITE_FIELD.ripples.radius;
   }
 }

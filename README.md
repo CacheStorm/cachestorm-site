@@ -16,7 +16,7 @@ The default development URL is `http://127.0.0.1:3000`. For a different port, in
 ```bash
 npm run format:check
 npm run lint
-npm run test:hero
+npm run test:background
 npm run commands:check
 npm run build
 npm run typecheck
@@ -52,9 +52,9 @@ When updating product content, pin a new upstream commit, recheck configuration 
 - Copy errors are announced, and users can manually select code.
 - Motion respects `prefers-reduced-motion`. Content is server-rendered and remains visible without animation.
 
-The full-width hero uses a dependency-free Canvas 2D circuit field. `HERO_FIELD` in `src/lib/hero-field.ts` owns colors, packet budgets, speed, interaction radii and effect lifetimes. The client component only mounts the scene; the page content stays server-rendered. Empty-area taps emit bounded data pulses, while controls, text selection and touch scrolling retain their normal behavior. Visibility observers pause rendering offscreen and in hidden tabs; reduced motion renders a static composition. Pixel density and canvas area are capped for high-resolution displays.
+The shared layout mounts one decorative SVG background for every route. Circuit lines, outlined memory cells and lightning shapes continue behind the hero, content and footer. `SITE_FIELD` in `src/lib/site-field.ts` owns density, motion speed, depth, interaction radii and effect lifetimes. The SVG renderer uses fixed element pools and updates attributes outside React; scrolling adds gentle depth-dependent parallax without creating a document-sized SVG. Reading masks follow visible prose, and cards keep their opaque surfaces.
 
-`npm run test:hero` covers effect limits and expiry, time-based movement, local pointer influence, idle recovery, tap filtering, visibility and reduced-motion scheduling, pixel budgets and unmount cleanup. The tests use Node's built-in runner and the existing TypeScript compiler, with no additional dependencies.
+`npm run test:background` checks local pointer forces, bounded effects and expiry, tap filtering, touch scrolling, time-based movement, visibility/reduced-motion scheduling, SVG element budgets, reading-mask updates and cleanup. Tests use Node's built-in runner and the existing TypeScript compiler. No animation dependencies are added.
 
 ## Responsive layout
 
