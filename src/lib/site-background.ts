@@ -1,10 +1,4 @@
-import {
-  SITE_FIELD,
-  SiteField,
-  easeOut,
-  projectY,
-  routePoint,
-} from "./site-field";
+import { SITE_FIELD, SiteField, easeOut, projectY } from "./site-field";
 
 const NS = "http://www.w3.org/2000/svg";
 const CONTROL =
@@ -79,10 +73,13 @@ export function mountSiteBackground(
       links,
     ),
   );
-  const rippleNodes = Array.from({ length: SITE_FIELD.ripples.max }, () => {
-    const group = node("g", { opacity: "0", class: "field-ripple" }, effects);
-    return [node("path", {}, group), node("path", { opacity: ".45" }, group)];
-  });
+  const rippleNodes = Array.from(
+    { length: SITE_FIELD.ripples.max + SITE_FIELD.relays.max },
+    () => {
+      const group = node("g", { opacity: "0", class: "field-ripple" }, effects);
+      return [node("path", {}, group), node("path", { opacity: ".45" }, group)];
+    },
+  );
   const sparkNodes = Array.from({ length: SITE_FIELD.sparks.max }, () =>
     node("path", { d: SHAPES[0], opacity: "0", class: "field-spark" }, effects),
   );
@@ -179,6 +176,7 @@ export function mountSiteBackground(
     });
     let connections = 0;
     let highlighted = 0;
+    const waves = field.waves;
     set(focus, "opacity", n(field.pointer.strength));
     if (field.pointer.strength > 0.01) {
       set(
@@ -190,36 +188,37 @@ export function mountSiteBackground(
     }
     field.packets.forEach((packet, i) => {
       const route = field.routes[packet.route];
-      const p = routePoint(route, packet.distance);
-      const x = p.x + packet.offset.x;
-      const y =
-        projectY(route, p.y, scroll, field.height) +
-        packet.offset.y +
-        (reduced ? 0 : Math.sin(field.time * 0.4 + i) * 5 * route.depth);
+      const { x, y, angle: direction } = field.position(packet, reduced);
       const item = shapeNodes[i];
       const alpha = edge(x, y);
       set(item, "visibility", alpha ? "visible" : "hidden");
       if (!alpha) return; // Offscreen shapes have no transform/opacity work.
       const size = packet.size * (i % 5 === 0 ? SITE_FIELD.symbolScale : 1);
+      const distance = Math.hypot(x - field.pointer.x, y - field.pointer.y);
       const angle =
         i % 5 === 0
           ? reduced
             ? 0
-            : Math.sin(field.time * 0.12 + i) * 12
-          : (p.angle * 180) / Math.PI;
+            : Math.sin(field.time * 0.65 + packet.phase) *
+              (12 +
+                Math.max(0, 1 - distance / SITE_FIELD.pointerRadius) *
+                  field.pointer.strength *
+                  18)
+          : (direction * 180) / Math.PI;
       set(
         item,
         "transform",
         `translate(${n(x)} ${n(y)}) rotate(${n(angle)}) scale(${n(size)})`,
       );
       set(item, "opacity", n(alpha * (0.35 + route.depth * 0.55)));
-      const distance = Math.hypot(x - field.pointer.x, y - field.pointer.y);
-      let reaction =
+      let reaction = Math.max(
+        packet.pulse,
         Math.max(0, 1 - distance / SITE_FIELD.pointerRadius) ** 1.4 *
-        field.pointer.strength;
-      for (const ripple of field.ripples) {
+          field.pointer.strength,
+      );
+      for (const ripple of waves) {
         const t = ripple.age / ripple.life;
-        const radius = easeOut(t) * field.rippleRadius;
+        const radius = easeOut(t) * ripple.radius;
         const waveDistance = Math.hypot(x - ripple.x, y - ripple.y);
         reaction = Math.max(
           reaction,
@@ -227,7 +226,8 @@ export function mountSiteBackground(
             0,
             1 - Math.abs(waveDistance - radius) / SITE_FIELD.waveWidth,
           ) *
-            (1 - t),
+            (1 - t) *
+            ripple.gain,
         );
       }
       if (
@@ -252,7 +252,7 @@ export function mountSiteBackground(
           set(
             link,
             "d",
-            `M${n(x)} ${n(y)}L${n(field.pointer.x)} ${n(field.pointer.y)}`,
+            `M${n(x)} ${n(y)}Q${n((x + field.pointer.x) / 2 - (y - field.pointer.y) * 0.18)} ${n((y + field.pointer.y) / 2 + (x - field.pointer.x) * 0.18)} ${n(field.pointer.x)} ${n(field.pointer.y)}`,
           );
           set(
             link,
@@ -271,16 +271,22 @@ export function mountSiteBackground(
     for (; connections < linkNodes.length; connections++)
       set(linkNodes[connections], "opacity", "0");
     rippleNodes.forEach(([outer, inner], i) => {
-      const ripple = field.ripples[i];
+      const ripple = waves[i];
       const group = outer.parentElement!;
       if (!ripple) {
         set(group, "opacity", "0");
         return;
       }
       const t = ripple.age / ripple.life;
-      const radius = 3 + easeOut(t) * field.rippleRadius;
+      const radius = 3 + easeOut(t) * ripple.radius;
       set(group, "transform", `translate(${n(ripple.x)} ${n(ripple.y)})`);
-      set(group, "opacity", n((1 - t) ** 2 * Math.min(1, t * 16)));
+      set(group, "data-generation", String(ripple.generation));
+      set(
+        group,
+        "opacity",
+        n((1 - t) ** 2 * Math.min(1, t * 16) * ripple.gain),
+      );
+      set(inner, "opacity", ripple.generation ? "0" : ".45");
       set(outer, "d", ringPath(radius, ripple.variant === 1));
       set(
         inner,

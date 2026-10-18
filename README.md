@@ -56,7 +56,9 @@ The shared layout mounts two viewport-fixed decorative SVG layers for every rout
 
 `SITE_FIELD` in `src/lib/site-field.ts` owns density, motion speed, depth, interaction radii and effect lifetimes. The SVG renderer uses fixed element pools and cached attribute updates outside React. Scrolling adds gentle depth-dependent parallax without creating a document-sized SVG. Mobile density is lower; hidden and reduced-motion scenes stop scheduling frames. Theme-aware, low-opacity strokes preserve reading contrast without rectangular reading masks.
 
-`npm run test:background` checks local pointer forces, bounded effects and expiry, tracking over controls, tap filtering, touch scrolling, time-based movement, visibility/reduced-motion scheduling, SVG element budgets, mask-free foreground placement, scroll coordinates and cleanup. Tests use Node's built-in runner and the existing TypeScript compiler. No animation dependencies are added.
+Nearby shapes follow softly breathing orbits at different speeds, using critically damped springs to absorb pointer changes. Click wavefronts light up shapes and trigger smaller local waves, with at most two relay generations. Each click has a shared propagation budget; relay opacity falls to 42% per generation. Desktop keeps at most eight local waves, mobile three, and all effects expire without timers or additional React renders.
+
+`npm run test:background` checks local pointer forces, ongoing orbits and spring continuity, relay depth and mobile budgets, bounded effects and expiry, tracking over controls, tap filtering, touch scrolling, time-based movement, visibility/reduced-motion scheduling, SVG element budgets, mask-free foreground placement, scroll coordinates and cleanup. Tests use Node's built-in runner and the existing TypeScript compiler. No animation dependencies are added.
 
 ## Responsive layout
 

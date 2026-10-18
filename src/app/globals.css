@@ -536,6 +536,10 @@ kbd {
   stroke: var(--field-active);
   stroke-width: 1.65;
 }
+.field-ripple[data-generation="1"],
+.field-ripple[data-generation="2"] {
+  stroke-width: 1;
+}
 .field-spark {
   fill: var(--field-active);
   stroke: none;

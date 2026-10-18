@@ -16,6 +16,145 @@ function advance(field, seconds, fps = 60) {
   for (let i = 0; i < seconds * fps; i++) field.step(1 / fps);
 }
 
+function stillPackets(distances, width = 1440) {
+  const field = scene(width);
+  field.routes = [
+    {
+      points: [
+        { x: 0, y: 400 },
+        { x: 1440, y: 400 },
+      ],
+      distances: [0, 1440],
+      length: 1440,
+      depth: 0.8,
+    },
+  ];
+  field.packets = field.packets.slice(0, distances.length).map((packet, i) => ({
+    ...packet,
+    route: 0,
+    distance: distances[i],
+    speed: 0,
+  }));
+  return field;
+}
+
+test("nearby shapes keep orbiting a still pointer and return smoothly", () => {
+  const field = stillPackets([700, 1200]);
+  field.move(650, 400);
+  advance(field, 0.7);
+  const packet = field.packets[0];
+  let previous = Math.atan2(packet.offset.y, 50 + packet.offset.x);
+  let turn = 0;
+  for (let i = 0; i < 220; i++) {
+    field.step(1 / 60);
+    const angle = Math.atan2(packet.offset.y, 50 + packet.offset.x);
+    turn += Math.atan2(Math.sin(angle - previous), Math.cos(angle - previous));
+    previous = angle;
+  }
+  assert.ok(
+    Math.abs(turn) > 1.8,
+    "a still pointer should produce a flowing orbit, not a fixed shove",
+  );
+  assert.ok(
+    Math.hypot(field.packets[1].offset.x, field.packets[1].offset.y) < 0.001,
+  );
+  const before = { ...packet.offset };
+  field.move(1000, 200);
+  field.step(1 / 60);
+  assert.ok(
+    Math.hypot(packet.offset.x - before.x, packet.offset.y - before.y) < 8,
+  );
+  field.leave();
+  advance(field, 4);
+  assert.ok(Math.hypot(packet.offset.x, packet.offset.y) < 0.001);
+});
+
+test("click waves relay through shapes with finite depth, gain and lifetime", () => {
+  const field = stillPackets([530, 615, 700, 1250]);
+  field.burst(450, 400);
+  const generations = new Set();
+  for (let i = 0; i < 240; i++) {
+    field.step(1 / 60);
+    for (const relay of field.relays ?? []) {
+      generations.add(relay.generation);
+      assert.ok(relay.gain > 0 && relay.gain < 1);
+      assert.ok(relay.generation <= 2);
+    }
+    assert.ok((field.relays?.length ?? 0) <= 8);
+  }
+  assert.ok(
+    generations.has(1),
+    "a wave reaching a shape should emit a local relay",
+  );
+  assert.ok(
+    generations.has(2),
+    "a relay should reach a neighboring shape once more",
+  );
+  assert.equal(field.packets[3].pulse, 0);
+  assert.equal(field.relays.length + field.ripples.length, 0);
+});
+
+test("relay storms respect mobile and desktop budgets and can be cleared immediately", () => {
+  for (const width of [375, 1440]) {
+    const field = stillPackets([110, 155, 200, 245], width);
+    for (let i = 0; i < 240; i++) {
+      if (i % 4 === 0) field.burst(70, 400);
+      field.step(1 / 60);
+      assert.ok(
+        field.relays.length <=
+          (field.mobile ? SITE_FIELD.relays.mobileMax : SITE_FIELD.relays.max),
+      );
+      assert.ok(field.ripples.length <= SITE_FIELD.ripples.max);
+      for (const wave of field.waves) {
+        assert.ok(
+          wave.chain.visited.size <=
+            (field.mobile
+              ? SITE_FIELD.relays.mobilePerClick
+              : SITE_FIELD.relays.perClick),
+        );
+        assert.ok(
+          Math.abs(wave.gain - SITE_FIELD.relays.gain ** wave.generation) <
+            0.0001,
+        );
+      }
+      assert.ok(
+        field.packets.every(
+          (p) =>
+            Number.isFinite(p.offset.x) &&
+            Number.isFinite(p.offset.y) &&
+            Math.abs(p.offset.x) <= SITE_FIELD.maxOffset &&
+            Math.abs(p.offset.y) <= SITE_FIELD.maxOffset,
+        ),
+      );
+    }
+    field.clearInteraction();
+    assert.equal(field.waves.length, 0);
+    assert.ok(
+      field.packets.every(
+        (p) => p.pulse === 0 && p.velocity.x === 0 && p.velocity.y === 0,
+      ),
+    );
+    field.burst(70, 400);
+    advance(field, 5);
+    assert.equal(field.waves.length, 0);
+    assert.ok(field.packets.every((p) => p.pulse < 0.001));
+  }
+});
+
+test("orbital springs follow the same path at 30, 60 and 144Hz", () => {
+  const positions = [30, 60, 144].map((fps) => {
+    const field = stillPackets([700]);
+    field.move(650, 400);
+    advance(field, 4, fps);
+    return field.packets[0].offset;
+  });
+  for (const position of positions.slice(1))
+    assert.ok(
+      Math.hypot(position.x - positions[0].x, position.y - positions[0].y) <
+        1.5,
+    );
+});
+
 test("packet budgets remain bounded from mobile through 4K", () => {
   for (const width of [375, 768, 1024, 1440, 1920, 2560, 3840]) {
     const field = scene(width);

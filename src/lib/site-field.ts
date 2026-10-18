@@ -13,13 +13,25 @@ export const SITE_FIELD = {
   connections: 6,
   idleAfter: 5,
   pointerRadius: 270,
-  displacement: 68,
-  swirl: 22,
+  orbitSpeed: 1,
+  orbitRadius: 32,
+  spring: 7.5,
   maxOffset: 96,
   waveWidth: 64,
   waveForce: 44,
   edgeFade: 64,
   ripples: { max: 6, life: 1.65, radius: 320, mobileRadius: 190 },
+  relays: {
+    max: 8,
+    mobileMax: 3,
+    life: 0.7,
+    radius: 130,
+    mobileRadius: 90,
+    gain: 0.42,
+    depth: 2,
+    perClick: 6,
+    mobilePerClick: 2,
+  },
   sparks: { max: 60, mobileMax: 24, perClick: 14, life: 1.1 },
   trails: { max: 20, life: 0.85, spacing: 10 },
 } as const;
@@ -37,8 +49,21 @@ type Packet = {
   speed: number;
   size: number;
   offset: Point;
+  velocity: Point;
+  phase: number;
+  pulse: number;
 };
-type Ripple = Point & { age: number; variant: number; life: number };
+type Ripple = Point & {
+  age: number;
+  variant: number;
+  life: number;
+  radius: number;
+  gain: number;
+  generation: number;
+  emitted: number;
+  hit: Set<number>;
+  chain: { remaining: number; visited: Set<number> };
+};
 type Spark = Point & { vx: number; vy: number; age: number; life: number };
 type Trail = Point & { age: number; life: number };
 
@@ -90,6 +115,7 @@ export class SiteField {
   routes: Route[] = [];
   packets: Packet[] = [];
   ripples: Ripple[] = [];
+  relays: Ripple[] = [];
   sparks: Spark[] = [];
   trails: Trail[] = [];
   private lastInteraction = -100;
@@ -157,6 +183,9 @@ export class SiteField {
         speed: SITE_FIELD.speed * (0.6 + random() * 1.1),
         size: 2 + random() * 2.6,
         offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 0 },
+        phase: i * 2.399963,
+        pulse: 0,
       };
     });
     this.clearInteraction();
@@ -188,7 +217,24 @@ export class SiteField {
     const variant = rapid ? 2 : this.clickSequence++ % 2;
     this.lastClick = this.time;
     this.lastInteraction = this.time;
-    this.ripples.push({ x, y, age: 0, life: SITE_FIELD.ripples.life, variant });
+    this.ripples.push({
+      x,
+      y,
+      age: 0,
+      life: SITE_FIELD.ripples.life,
+      variant,
+      radius: this.rippleRadius,
+      gain: 1,
+      generation: 0,
+      emitted: 0,
+      hit: new Set(),
+      chain: {
+        remaining: this.mobile
+          ? SITE_FIELD.relays.mobilePerClick
+          : SITE_FIELD.relays.perClick,
+        visited: new Set(),
+      },
+    });
     this.ripples = this.ripples.slice(-SITE_FIELD.ripples.max);
     const count = this.mobile ? 6 : SITE_FIELD.sparks.perClick;
     for (let i = 0; i < count; i++) {
@@ -210,6 +256,7 @@ export class SiteField {
 
   clearInteraction() {
     this.ripples = [];
+    this.relays = [];
     this.sparks = [];
     this.trails = [];
     this.pointer.inside = false;
@@ -218,7 +265,30 @@ export class SiteField {
     this.lastInteraction = -100;
     this.lastClick = -100;
     this.lastTrail = { x: -1000, y: -1000 };
-    for (const packet of this.packets) packet.offset = { x: 0, y: 0 };
+    for (const packet of this.packets) {
+      packet.offset = { x: 0, y: 0 };
+      packet.velocity = { x: 0, y: 0 };
+      packet.pulse = 0;
+    }
+  }
+
+  position(packet: Packet, still = false) {
+    const route = this.routes[packet.route];
+    const p = routePoint(route, packet.distance);
+    return {
+      x: p.x + (still ? 0 : packet.offset.x),
+      y:
+        projectY(route, p.y, still ? 0 : this.scroll, this.height) +
+        (still
+          ? 0
+          : packet.offset.y +
+            Math.sin(this.time * 0.4 + packet.phase) * 5 * route.depth),
+      angle: p.angle,
+    };
+  }
+
+  get waves() {
+    return this.ripples.concat(this.relays);
   }
 
   step(elapsed: number) {
@@ -231,7 +301,10 @@ export class SiteField {
     this.intensity += ((awake ? 1 : 0) - this.intensity) * mix;
     this.pointer.strength +=
       ((this.pointer.inside && awake ? 1 : 0) - this.pointer.strength) * mix;
-    for (const packet of this.packets) {
+    // Snapshot once: a relay can only reach its neighbors on later frames.
+    const waves = this.waves;
+    const decay = Math.exp(-SITE_FIELD.spring * dt);
+    for (const [index, packet] of this.packets.entries()) {
       const route = this.routes[packet.route];
       packet.distance =
         (packet.distance + packet.speed * dt * (0.55 + this.intensity * 0.45)) %
@@ -242,36 +315,93 @@ export class SiteField {
       const dy = screenY - this.pointer.y;
       const distance = Math.hypot(dx, dy);
       const influence =
-        clamp(1 - distance / SITE_FIELD.pointerRadius) ** 2 *
+        clamp(1 - distance / SITE_FIELD.pointerRadius) ** 1.5 *
         this.pointer.strength;
-      let ox =
-        (dx / Math.max(1, distance)) * influence * SITE_FIELD.displacement;
-      let oy =
-        (dy / Math.max(1, distance)) * influence * SITE_FIELD.displacement;
-      ox += (-dy / Math.max(1, distance)) * influence * SITE_FIELD.swirl;
-      oy += (dx / Math.max(1, distance)) * influence * SITE_FIELD.swirl;
-      for (const ripple of this.ripples) {
-        const radius = easeOut(ripple.age / ripple.life) * this.rippleRadius;
-        const rx = p.x - ripple.x;
-        const ry = screenY - ripple.y;
+      const angle =
+        Math.atan2(dy, dx) +
+        packet.phase +
+        this.time * SITE_FIELD.orbitSpeed * (0.75 + route.depth * 0.4) +
+        Math.sin(this.time * 0.6 + packet.phase) * 0.12;
+      const orbit =
+        (SITE_FIELD.orbitRadius + distance * 0.5) *
+        (1 + Math.sin(this.time * 1.2 + packet.phase) * 0.08);
+      let ox = (Math.cos(angle) * orbit - dx) * influence;
+      let oy = (Math.sin(angle) * orbit - dy) * influence;
+      packet.pulse *= Math.exp(-dt * 4);
+      const point = this.position(packet);
+      for (const ripple of waves) {
+        const radius = easeOut(ripple.age / ripple.life) * ripple.radius;
+        const nextRadius =
+          easeOut((ripple.age + dt) / ripple.life) * ripple.radius;
+        const rx = point.x - ripple.x;
+        const ry = point.y - ripple.y;
         const rd = Math.hypot(rx, ry);
         const force =
           clamp(1 - Math.abs(rd - radius) / SITE_FIELD.waveWidth) *
           (1 - ripple.age / ripple.life) *
-          SITE_FIELD.waveForce;
+          SITE_FIELD.waveForce *
+          ripple.gain;
         ox += (rx / Math.max(1, rd)) * force;
         oy += (ry / Math.max(1, rd)) * force;
+        if (
+          rd >= radius - 8 &&
+          rd <= nextRadius + 8 &&
+          !ripple.hit.has(index)
+        ) {
+          ripple.hit.add(index);
+          packet.pulse = Math.max(packet.pulse, ripple.gain * 0.65);
+          if (
+            ripple.generation < SITE_FIELD.relays.depth &&
+            ripple.emitted < (this.mobile ? 1 : 2) &&
+            ripple.chain.remaining > 0 &&
+            !ripple.chain.visited.has(index) &&
+            point.x > 0 &&
+            point.x < this.width &&
+            point.y > 0 &&
+            point.y < this.height
+          ) {
+            ripple.emitted++;
+            ripple.chain.remaining--;
+            ripple.chain.visited.add(index);
+            this.relays.push({
+              x: point.x,
+              y: point.y,
+              age: 0,
+              variant: 0,
+              life: SITE_FIELD.relays.life,
+              radius: this.mobile
+                ? SITE_FIELD.relays.mobileRadius
+                : SITE_FIELD.relays.radius,
+              gain: ripple.gain * SITE_FIELD.relays.gain,
+              generation: ripple.generation + 1,
+              emitted: 0,
+              hit: new Set([index]),
+              chain: ripple.chain,
+            });
+            const limit = this.mobile
+              ? SITE_FIELD.relays.mobileMax
+              : SITE_FIELD.relays.max;
+            if (this.relays.length > limit) this.relays.shift();
+          }
+        }
       }
-      packet.offset.x +=
-        (clamp(ox, -SITE_FIELD.maxOffset, SITE_FIELD.maxOffset) -
-          packet.offset.x) *
-        mix;
-      packet.offset.y +=
-        (clamp(oy, -SITE_FIELD.maxOffset, SITE_FIELD.maxOffset) -
-          packet.offset.y) *
-        mix;
+      // Exact critically damped spring: inertia without frame-dependent overshoot.
+      for (const axis of ["x", "y"] as const) {
+        const target = clamp(
+          axis === "x" ? ox : oy,
+          -SITE_FIELD.maxOffset,
+          SITE_FIELD.maxOffset,
+        );
+        const delta = packet.offset[axis] - target;
+        const momentum =
+          (packet.velocity[axis] + SITE_FIELD.spring * delta) * dt;
+        packet.offset[axis] = target + (delta + momentum) * decay;
+        packet.velocity[axis] =
+          (packet.velocity[axis] - SITE_FIELD.spring * momentum) * decay;
+      }
     }
     this.ripples = this.ripples.filter((r) => (r.age += dt) < r.life);
+    this.relays = this.relays.filter((r) => (r.age += dt) < r.life);
     this.trails = this.trails.filter((r) => (r.age += dt) < r.life);
     const drag = Math.exp(-dt * 2.8);
     this.sparks = this.sparks.filter((s) => {
