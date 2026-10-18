@@ -29,6 +29,5 @@ await sharp(
 )
   .png()
   .toFile("public/apple-touch-icon.png");
-const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><defs><radialGradient id="g"><stop stop-color="#b5d6ff"/><stop offset="1" stop-color="#f8fafc"/></radialGradient></defs><rect width="1200" height="630" fill="#f8fafc"/><circle cx="1000" cy="300" r="470" fill="url(#g)"/><g transform="translate(870 110) scale(2.7)">${mark}</g><text x="70" y="90" fill="#185cbb" font-size="22" font-family="Arial,sans-serif" letter-spacing="4">CACHESTORM</text><text x="66" y="242" fill="#111e31" font-size="84" font-family="Arial,sans-serif" font-weight="bold" letter-spacing="-4">Your data.</text><text x="66" y="340" fill="#111e31" font-size="84" font-family="Arial,sans-serif" font-weight="bold" letter-spacing="-4">At the speed</text><text x="66" y="438" fill="#1765cd" font-size="84" font-family="Arial,sans-serif" font-weight="bold" letter-spacing="-4">of thought.</text><text x="72" y="542" fill="#536477" font-family="Arial,sans-serif" font-size="23">Redis-compatible. Pure Go. One binary.</text><path d="M70 585H1130" stroke="#dce4ee"/><text x="1130" y="547" text-anchor="end" font-family="Arial,sans-serif" font-size="17" fill="#536477">cachestorm.com</text></svg>`;
-await sharp(Buffer.from(og)).png().toFile("public/og.png");
+await import("./generate-og.mjs");
 console.log("Generated SVG brand assets, Open Graph image and Apple icon.");
