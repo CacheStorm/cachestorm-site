@@ -4,33 +4,30 @@ import {
   subscribeBackgroundMotion,
 } from "./background-motion";
 
-// Turning off tears down the whole controller, including its observers/listeners.
+// Mouse effects can stop independently of the continuous ambient scene.
 export function bindSiteBackground(
   svg: SVGSVGElement | null,
   interaction: SVGSVGElement | null,
 ) {
   if (!svg || !interaction) return;
-  let stop: (() => void) | undefined;
+  const control = mountSiteBackground(svg, interaction, {
+    mouseEffects: readBackgroundMotion(),
+  });
+  if (!control) return;
+  svg.dataset.enabled = "true";
   let disposed = false;
   function syncPreference() {
     if (disposed) return;
     const enabled = readBackgroundMotion();
-    svg!.dataset.enabled = interaction!.dataset.enabled = String(enabled);
-    if (enabled && !stop) {
-      stop = mountSiteBackground(svg, interaction, {
-        respectReducedMotion: false,
-      });
-    } else if (!enabled && stop) {
-      stop();
-      stop = undefined;
-    }
+    interaction!.dataset.enabled = String(enabled);
+    control!.setMouseEffects(enabled);
   }
   const unsubscribe = subscribeBackgroundMotion(syncPreference);
   syncPreference();
   return () => {
     disposed = true;
     unsubscribe();
-    stop?.();
+    control();
   };
 }
 
@@ -61,7 +58,10 @@ function set(item: Element, name: string, value: string) {
 export function mountSiteBackground(
   svg: SVGSVGElement | null,
   interaction: SVGSVGElement | null,
-  { respectReducedMotion = true }: { respectReducedMotion?: boolean } = {},
+  {
+    respectReducedMotion = true,
+    mouseEffects = true,
+  }: { respectReducedMotion?: boolean; mouseEffects?: boolean } = {},
 ) {
   const layer = svg?.querySelector<SVGGElement>("[data-field-layer]");
   const interactiveLayer = interaction?.querySelector<SVGGElement>(
@@ -73,6 +73,7 @@ export function mountSiteBackground(
   let reduced = respectReducedMotion && motion.matches;
   let visible = false;
   let disposed = false;
+  let mouseEnabled = mouseEffects;
   let frame = 0;
   let lastFrame = 0;
   let down: { x: number; y: number; id: number; moved: boolean } | null = null;
@@ -487,7 +488,7 @@ export function mountSiteBackground(
     field.scrollTarget = window.scrollY;
     down = null;
     // Client coordinates stay viewport-relative even while the document scrolls.
-    if (!reduced && field.pointer.inside)
+    if (mouseEnabled && !reduced && field.pointer.inside)
       field.move(field.pointer.x, field.pointer.y);
     if (reduced && visible && !document.hidden) render();
   }
@@ -504,45 +505,68 @@ export function mountSiteBackground(
   const size = new ResizeObserver(resize);
   intersection.observe(svg);
   size.observe(svg);
-  document.addEventListener("pointermove", move, {
-    passive: true,
-    capture: true,
-  });
-  document.addEventListener("pointerdown", pointerDown, {
-    passive: true,
-    capture: true,
-  });
-  document.addEventListener("pointerup", pointerUp, {
-    passive: true,
-    capture: true,
-  });
-  document.addEventListener("pointercancel", leave);
-  document.addEventListener("pointerleave", leave);
+  function listenMouse(enabled: boolean) {
+    if (enabled) {
+      document.addEventListener("pointermove", move, {
+        passive: true,
+        capture: true,
+      });
+      document.addEventListener("pointerdown", pointerDown, {
+        passive: true,
+        capture: true,
+      });
+      document.addEventListener("pointerup", pointerUp, {
+        passive: true,
+        capture: true,
+      });
+      document.addEventListener("pointercancel", leave);
+      document.addEventListener("pointerleave", leave);
+      window.addEventListener("blur", leave);
+    } else {
+      document.removeEventListener("pointermove", move, { capture: true });
+      document.removeEventListener("pointerdown", pointerDown, {
+        capture: true,
+      });
+      document.removeEventListener("pointerup", pointerUp, { capture: true });
+      document.removeEventListener("pointercancel", leave);
+      document.removeEventListener("pointerleave", leave);
+      window.removeEventListener("blur", leave);
+    }
+  }
+  function setMouseEffects(enabled: boolean) {
+    if (disposed || mouseEnabled === enabled) return;
+    mouseEnabled = enabled;
+    listenMouse(enabled);
+    if (!enabled) {
+      field.clearInteraction();
+      down = null;
+      render();
+      sync();
+    }
+  }
+  listenMouse(mouseEnabled);
   document.addEventListener("visibilitychange", sync);
-  window.addEventListener("blur", leave);
   window.addEventListener("resize", resize, { passive: true });
   window.addEventListener("scroll", scroll, { passive: true });
   if (respectReducedMotion) motion.addEventListener("change", updateMotion);
   resize();
-  return () => {
-    disposed = true;
-    cancelAnimationFrame(frame);
-    intersection.disconnect();
-    size.disconnect();
-    document.removeEventListener("pointermove", move, { capture: true });
-    document.removeEventListener("pointerdown", pointerDown, { capture: true });
-    document.removeEventListener("pointerup", pointerUp, { capture: true });
-    document.removeEventListener("pointercancel", leave);
-    document.removeEventListener("pointerleave", leave);
-    document.removeEventListener("visibilitychange", sync);
-    window.removeEventListener("blur", leave);
-    window.removeEventListener("resize", resize);
-    window.removeEventListener("scroll", scroll);
-    if (respectReducedMotion)
-      motion.removeEventListener("change", updateMotion);
-    layer.replaceChildren();
-    interactiveLayer.replaceChildren();
-    delete svg.dataset.motion;
-    delete interaction.dataset.motion;
-  };
+  return Object.assign(
+    () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      intersection.disconnect();
+      size.disconnect();
+      listenMouse(false);
+      document.removeEventListener("visibilitychange", sync);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", scroll);
+      if (respectReducedMotion)
+        motion.removeEventListener("change", updateMotion);
+      layer.replaceChildren();
+      interactiveLayer.replaceChildren();
+      delete svg.dataset.motion;
+      delete interaction.dataset.motion;
+    },
+    { setMouseEffects },
+  );
 }

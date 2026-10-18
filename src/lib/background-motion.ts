@@ -1,3 +1,4 @@
+// Keep the existing storage key so previously saved mouse choices survive.
 export const BACKGROUND_MOTION_KEY = "cachestorm-background-motion";
 const CHANGE = "cachestorm:background-motion";
 const QUERY = "(prefers-reduced-motion: reduce)";

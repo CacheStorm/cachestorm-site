@@ -236,7 +236,7 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
   };
 }
 
-test("background toggle disposes active effects, frames and input listeners, then restarts once", () => {
+test("mouse toggle clears input effects while ambient animation keeps running without remounting", () => {
   const env = browser();
   let cleanup;
   try {
@@ -250,33 +250,44 @@ test("background toggle disposes active effects, frames and input listeners, the
     assert.equal(env.raf.size, 1);
     setBackgroundMotion(false);
     assert.equal(env.storage.get(BACKGROUND_MOTION_KEY), "off");
-    assert.equal(env.svg.dataset.enabled, "false");
+    assert.equal(env.svg.dataset.enabled, "true");
     assert.equal(env.interaction.dataset.enabled, "false");
-    assert.equal(env.raf.size, 0);
+    assert.equal(env.raf.size, 1);
+    assert.ok(env.layer.children.length > 0);
+    assert.equal(env.rings, 0);
     assert.equal(
-      env.layer.children.length + env.interactive.children.length,
-      0,
+      env.doc.listeners.size,
+      1,
+      "only the ambient visibility listener stays attached",
     );
-    assert.equal(env.doc.listeners.size, 0);
-    assert.ok(env.observers.every((o) => o.disconnected));
-    const stopped = env.writes;
+    assert.ok(env.observers.every((o) => !o.disconnected));
+    const before = env.writes;
     env.pointer("pointermove");
     env.pointer("pointerdown");
     env.pointer("pointerup");
     env.win.dispatchEvent(new Event("scroll"));
     env.flush(120);
-    assert.equal(env.writes, stopped);
+    assert.ok(env.writes > before, "ambient shapes must continue moving");
+    assert.equal(env.rings, 0, "disabled clicks must not create waves");
+    assert.ok(
+      env.rendered
+        .filter((n) => n.getAttribute("class") === "field-trail")
+        .every((n) => Number(n.getAttribute("opacity")) === 0),
+    );
     setBackgroundMotion(true);
     assert.equal(env.storage.get(BACKGROUND_MOTION_KEY), "on");
-    env.observers[2].callback([{ isIntersecting: true }]);
+    env.pointer("pointermove");
+    env.pointer("pointerdown");
+    env.pointer("pointerup");
     env.flush(8);
     assert.equal(env.svg.dataset.enabled, "true");
     assert.equal(env.raf.size, 1);
+    assert.ok(env.rings > 0, "input effects restart immediately");
     setBackgroundMotion(true);
     assert.equal(
       env.observers.length,
-      4,
-      "an unchanged preference must not mount another controller",
+      2,
+      "mouse preferences must never remount the ambient scene",
     );
     cleanup();
     cleanup = null;
@@ -289,36 +300,37 @@ test("background toggle disposes active effects, frames and input listeners, the
   }
 });
 
-test("first use follows reduced motion; saved choices override it and synchronize across tabs", () => {
+test("mouse choices synchronize across tabs while ambient motion always respects reduced motion", () => {
   const env = browser({ reduced: true });
   let cleanup;
   try {
     cleanup = bindSiteBackground(env.svg, env.interaction);
     assert.equal(readBackgroundMotion(), false);
-    assert.equal(env.observers.length, 0);
-    assert.equal(env.doc.listeners.size, 0);
+    assert.equal(env.observers.length, 2);
+    env.observers[0].callback([{ isIntersecting: true }]);
+    assert.equal(env.doc.listeners.size, 1);
     assert.equal(env.raf.size, 0);
     env.motion.matches = false;
     env.motion.dispatchEvent(new Event("change"));
     assert.equal(env.svg.dataset.enabled, "true");
     setBackgroundMotion(false);
     assert.equal(readBackgroundMotion(), false);
-    assert.equal(env.svg.dataset.enabled, "false");
+    assert.equal(env.svg.dataset.enabled, "true");
+    assert.equal(env.interaction.dataset.enabled, "false");
     env.motion.matches = true;
     env.motion.dispatchEvent(new Event("change"));
     setBackgroundMotion(true);
-    env.observers[2].callback([{ isIntersecting: true }]);
     env.flush(8);
     assert.equal(
       env.svg.dataset.motion,
-      "running",
-      "an explicit on choice overrides the system default",
+      "reduced",
+      "mouse preferences must not override the system's ambient motion limit",
     );
     env.storage.set(BACKGROUND_MOTION_KEY, "off");
     env.win.dispatchEvent(
       Object.assign(new Event("storage"), { key: BACKGROUND_MOTION_KEY }),
     );
-    assert.equal(env.svg.dataset.enabled, "false");
+    assert.equal(env.interaction.dataset.enabled, "false");
     env.storage.clear();
     env.win.dispatchEvent(Object.assign(new Event("storage"), { key: null }));
     assert.equal(readBackgroundMotion(), false);
@@ -337,17 +349,19 @@ test("a saved off choice stays off on mount and storage failures still allow thi
   try {
     env.storage.set(BACKGROUND_MOTION_KEY, "off");
     cleanup = bindSiteBackground(env.svg, env.interaction);
-    assert.equal(env.observers.length, 0);
-    assert.equal(env.svg.dataset.enabled, "false");
+    assert.equal(env.observers.length, 2);
+    env.observers[0].callback([{ isIntersecting: true }]);
+    assert.equal(env.svg.dataset.enabled, "true");
+    assert.equal(env.interaction.dataset.enabled, "false");
     let updates = 0;
     unsubscribe = subscribeBackgroundMotion(() => updates++);
     env.win.storageBlocked = true;
     setBackgroundMotion(true);
     assert.equal(readBackgroundMotion(), true);
-    assert.equal(env.svg.dataset.enabled, "true");
+    assert.equal(env.interaction.dataset.enabled, "true");
     setBackgroundMotion(false);
     assert.equal(readBackgroundMotion(), false);
-    assert.equal(env.raf.size, 0);
+    assert.equal(env.raf.size, 1);
     assert.equal(updates, 2);
   } finally {
     cleanup?.();

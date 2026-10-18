@@ -14,7 +14,7 @@ export function AnimationToggle() {
     readBackgroundMotion,
     () => false,
   );
-  const label = enabled ? "Animasyonları kapat" : "Animasyonları aç";
+  const label = enabled ? "Disable mouse effects" : "Enable mouse effects";
   const Icon = enabled ? Mouse : MouseOff;
   return (
     <button
