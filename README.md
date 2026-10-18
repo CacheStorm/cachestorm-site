@@ -47,6 +47,7 @@ When updating product content, pin a new upstream commit, recheck configuration 
 ## Interaction and accessibility
 
 - Appearance choice persists locally, syncs between tabs and includes a device-driven System mode. CSS resolves the system scheme without JavaScript; a small head script restores explicit choices before hydration.
+- The mouse button beside Appearance controls only the decorative background and pointer effects. Its on/off choice persists under `cachestorm-background-motion` and syncs between tabs. Before a choice is saved, it follows `prefers-reduced-motion`; an explicit choice takes precedence. Turning it off clears the SVG pools and removes the controller's animation frames, input/scroll listeners and observers. Other page interactions and content animations keep working. If storage is blocked, the button still works for the current tab.
 - `Ctrl/Cmd+K` opens the searchable documentation dialog. Escape closes it; arrow keys move between results.
 - Mobile navigation, documentation selection, platform and language selectors, data structure examples, FAQ, command filtering and clipboard controls work without a backend.
 - Copy errors are announced, and users can manually select code.

@@ -17,7 +17,7 @@ after(() => {
     throw new Error("Unsafe test cleanup path");
   return fs.rm(temp, { recursive: true, force: true });
 });
-for (const name of ["site-field", "site-background"]) {
+for (const name of ["site-field", "background-motion", "site-background"]) {
   const source = await fs.readFile(`src/lib/${name}.ts`, "utf8");
   const compiled = ts
     .transpileModule(source, {
@@ -26,12 +26,19 @@ for (const name of ["site-field", "site-background"]) {
         target: ts.ScriptTarget.ES2022,
       },
     })
-    .outputText.replace('from "./site-field"', 'from "./site-field.mjs"');
+    .outputText.replace('from "./site-field"', 'from "./site-field.mjs"')
+    .replace('from "./background-motion"', 'from "./background-motion.mjs"');
   await fs.writeFile(path.join(temp, `${name}.mjs`), compiled);
 }
-const { mountSiteBackground } = await import(
+const { mountSiteBackground, bindSiteBackground } = await import(
   pathToFileURL(path.join(temp, "site-background.mjs"))
 );
+const {
+  BACKGROUND_MOTION_KEY,
+  readBackgroundMotion,
+  setBackgroundMotion,
+  subscribeBackgroundMotion,
+} = await import(pathToFileURL(path.join(temp, "background-motion.mjs")));
 
 class Target extends EventTarget {
   listeners = new Set();
@@ -92,10 +99,22 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
     main = new Target();
   const raf = new Map(),
     observers = [];
+  const storage = new Map();
   let serial = 0,
     now = 100,
     currentWidth = width;
   motion.matches = reduced;
+  win.matchMedia = () => motion;
+  win.localStorage = {
+    getItem(key) {
+      if (win.storageBlocked) throw new Error("Storage unavailable");
+      return storage.get(key) ?? null;
+    },
+    setItem(key, value) {
+      if (win.storageBlocked) throw new Error("Storage unavailable");
+      storage.set(key, value);
+    },
+  };
   svg.querySelector = (selector) =>
     missingLayer ? null : selector.includes("data-field-layer") ? layer : null;
   interaction.querySelector = () => (missingLayer ? null : interactive);
@@ -190,6 +209,7 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
     interaction,
     raf,
     observers,
+    storage,
     flush,
     pointer,
     restore,
@@ -215,6 +235,128 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
     },
   };
 }
+
+test("background toggle disposes active effects, frames and input listeners, then restarts once", () => {
+  const env = browser();
+  let cleanup;
+  try {
+    cleanup = bindSiteBackground(env.svg, env.interaction);
+    env.observers[0].callback([{ isIntersecting: true }]);
+    env.pointer("pointermove");
+    env.pointer("pointerdown");
+    env.pointer("pointerup");
+    env.flush(8);
+    assert.ok(env.rings > 0);
+    assert.equal(env.raf.size, 1);
+    setBackgroundMotion(false);
+    assert.equal(env.storage.get(BACKGROUND_MOTION_KEY), "off");
+    assert.equal(env.svg.dataset.enabled, "false");
+    assert.equal(env.interaction.dataset.enabled, "false");
+    assert.equal(env.raf.size, 0);
+    assert.equal(
+      env.layer.children.length + env.interactive.children.length,
+      0,
+    );
+    assert.equal(env.doc.listeners.size, 0);
+    assert.ok(env.observers.every((o) => o.disconnected));
+    const stopped = env.writes;
+    env.pointer("pointermove");
+    env.pointer("pointerdown");
+    env.pointer("pointerup");
+    env.win.dispatchEvent(new Event("scroll"));
+    env.flush(120);
+    assert.equal(env.writes, stopped);
+    setBackgroundMotion(true);
+    assert.equal(env.storage.get(BACKGROUND_MOTION_KEY), "on");
+    env.observers[2].callback([{ isIntersecting: true }]);
+    env.flush(8);
+    assert.equal(env.svg.dataset.enabled, "true");
+    assert.equal(env.raf.size, 1);
+    setBackgroundMotion(true);
+    assert.equal(
+      env.observers.length,
+      4,
+      "an unchanged preference must not mount another controller",
+    );
+    cleanup();
+    cleanup = null;
+    assert.equal(env.raf.size, 0);
+    for (const target of [env.doc, env.win, env.motion])
+      assert.equal(target.listeners.size, 0);
+  } finally {
+    cleanup?.();
+    env.restore();
+  }
+});
+
+test("first use follows reduced motion; saved choices override it and synchronize across tabs", () => {
+  const env = browser({ reduced: true });
+  let cleanup;
+  try {
+    cleanup = bindSiteBackground(env.svg, env.interaction);
+    assert.equal(readBackgroundMotion(), false);
+    assert.equal(env.observers.length, 0);
+    assert.equal(env.doc.listeners.size, 0);
+    assert.equal(env.raf.size, 0);
+    env.motion.matches = false;
+    env.motion.dispatchEvent(new Event("change"));
+    assert.equal(env.svg.dataset.enabled, "true");
+    setBackgroundMotion(false);
+    assert.equal(readBackgroundMotion(), false);
+    assert.equal(env.svg.dataset.enabled, "false");
+    env.motion.matches = true;
+    env.motion.dispatchEvent(new Event("change"));
+    setBackgroundMotion(true);
+    env.observers[2].callback([{ isIntersecting: true }]);
+    env.flush(8);
+    assert.equal(
+      env.svg.dataset.motion,
+      "running",
+      "an explicit on choice overrides the system default",
+    );
+    env.storage.set(BACKGROUND_MOTION_KEY, "off");
+    env.win.dispatchEvent(
+      Object.assign(new Event("storage"), { key: BACKGROUND_MOTION_KEY }),
+    );
+    assert.equal(env.svg.dataset.enabled, "false");
+    env.storage.clear();
+    env.win.dispatchEvent(Object.assign(new Event("storage"), { key: null }));
+    assert.equal(readBackgroundMotion(), false);
+    env.motion.matches = false;
+    env.motion.dispatchEvent(new Event("change"));
+    assert.equal(readBackgroundMotion(), true);
+  } finally {
+    cleanup?.();
+    env.restore();
+  }
+});
+
+test("a saved off choice stays off on mount and storage failures still allow this tab to toggle", () => {
+  const env = browser();
+  let cleanup, unsubscribe;
+  try {
+    env.storage.set(BACKGROUND_MOTION_KEY, "off");
+    cleanup = bindSiteBackground(env.svg, env.interaction);
+    assert.equal(env.observers.length, 0);
+    assert.equal(env.svg.dataset.enabled, "false");
+    let updates = 0;
+    unsubscribe = subscribeBackgroundMotion(() => updates++);
+    env.win.storageBlocked = true;
+    setBackgroundMotion(true);
+    assert.equal(readBackgroundMotion(), true);
+    assert.equal(env.svg.dataset.enabled, "true");
+    setBackgroundMotion(false);
+    assert.equal(readBackgroundMotion(), false);
+    assert.equal(env.raf.size, 0);
+    assert.equal(updates, 2);
+  } finally {
+    cleanup?.();
+    unsubscribe?.();
+    env.win.storageBlocked = false;
+    setBackgroundMotion(false);
+    env.restore();
+  }
+});
 
 test("pointer traces continue over controls while control clicks stay excluded", () => {
   const env = browser();

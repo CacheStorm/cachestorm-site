@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { mountSiteBackground } from "@/lib/site-background";
+import { bindSiteBackground } from "@/lib/site-background";
 
 export function SiteBackground() {
   const ref = useRef<SVGSVGElement>(null);
   const interaction = useRef<SVGSVGElement>(null);
   const id = useId().replace(/:/g, "");
-  useEffect(() => mountSiteBackground(ref.current, interaction.current), []);
+  useEffect(() => bindSiteBackground(ref.current, interaction.current), []);
   return (
     <>
       <svg
         ref={ref}
         className="site-background"
+        data-enabled="false"
         aria-hidden="true"
         focusable="false"
         preserveAspectRatio="none"
@@ -37,6 +38,7 @@ export function SiteBackground() {
       <svg
         ref={interaction}
         className="site-interaction"
+        data-enabled="false"
         aria-hidden="true"
         focusable="false"
         preserveAspectRatio="none"

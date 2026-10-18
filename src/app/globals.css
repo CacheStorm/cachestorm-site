@@ -392,6 +392,46 @@ kbd {
 .theme-panel {
   z-index: 60;
 }
+.animation-toggle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 10px;
+  color: var(--muted);
+  background: transparent;
+}
+.animation-toggle[aria-pressed="true"] {
+  color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 7%, transparent);
+}
+.animation-toggle[aria-pressed="false"] svg {
+  opacity: 0.55;
+}
+.animation-toggle::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  inset-block-start: calc(100% + 10px);
+  inset-inline-end: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.animation-toggle:is(:hover, :focus-visible)::after {
+  opacity: 1;
+  visibility: visible;
+}
 .mobile-nav {
   display: none;
 }
@@ -499,7 +539,12 @@ kbd {
     var(--field-wash),
     transparent 70%
   );
+}
+.site-background[data-enabled="true"] {
   animation: scene-arrive 1.2s ease-out both;
+}
+.site-interaction[data-enabled="false"] {
+  visibility: hidden;
 }
 .site-interaction {
   position: fixed;
@@ -2779,7 +2824,11 @@ kbd {
     height: 36px;
   }
   .header-actions {
-    gap: 4px;
+    gap: 2px;
+  }
+  .site-header .logo {
+    font-size: clamp(16px, 5.06vw, 22px);
+    gap: 5px;
   }
   .header-actions .github-link {
     display: none;
@@ -3452,6 +3501,11 @@ kbd {
   }
   .docs-index-grid h2 {
     font-size: 21px;
+  }
+}
+@media (max-width: 360px) {
+  .site-header .logo > span {
+    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {

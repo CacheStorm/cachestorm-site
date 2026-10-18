@@ -1,4 +1,38 @@
 import { SITE_FIELD, SiteField, easeOut, projectY } from "./site-field";
+import {
+  readBackgroundMotion,
+  subscribeBackgroundMotion,
+} from "./background-motion";
+
+// Turning off tears down the whole controller, including its observers/listeners.
+export function bindSiteBackground(
+  svg: SVGSVGElement | null,
+  interaction: SVGSVGElement | null,
+) {
+  if (!svg || !interaction) return;
+  let stop: (() => void) | undefined;
+  let disposed = false;
+  function syncPreference() {
+    if (disposed) return;
+    const enabled = readBackgroundMotion();
+    svg!.dataset.enabled = interaction!.dataset.enabled = String(enabled);
+    if (enabled && !stop) {
+      stop = mountSiteBackground(svg, interaction, {
+        respectReducedMotion: false,
+      });
+    } else if (!enabled && stop) {
+      stop();
+      stop = undefined;
+    }
+  }
+  const unsubscribe = subscribeBackgroundMotion(syncPreference);
+  syncPreference();
+  return () => {
+    disposed = true;
+    unsubscribe();
+    stop?.();
+  };
+}
 
 const NS = "http://www.w3.org/2000/svg";
 const CONTROL =
@@ -27,6 +61,7 @@ function set(item: Element, name: string, value: string) {
 export function mountSiteBackground(
   svg: SVGSVGElement | null,
   interaction: SVGSVGElement | null,
+  { respectReducedMotion = true }: { respectReducedMotion?: boolean } = {},
 ) {
   const layer = svg?.querySelector<SVGGElement>("[data-field-layer]");
   const interactiveLayer = interaction?.querySelector<SVGGElement>(
@@ -35,7 +70,7 @@ export function mountSiteBackground(
   if (!svg || !layer || !interaction || !interactiveLayer) return;
   const field = new SiteField();
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
-  let reduced = motion.matches;
+  let reduced = respectReducedMotion && motion.matches;
   let visible = false;
   let disposed = false;
   let frame = 0;
@@ -457,7 +492,7 @@ export function mountSiteBackground(
     if (reduced && visible && !document.hidden) render();
   }
   function updateMotion() {
-    reduced = motion.matches;
+    reduced = respectReducedMotion && motion.matches;
     field.clearInteraction();
     field.scroll = field.scrollTarget = reduced ? 0 : window.scrollY;
     sync();
@@ -487,7 +522,7 @@ export function mountSiteBackground(
   window.addEventListener("blur", leave);
   window.addEventListener("resize", resize, { passive: true });
   window.addEventListener("scroll", scroll, { passive: true });
-  motion.addEventListener("change", updateMotion);
+  if (respectReducedMotion) motion.addEventListener("change", updateMotion);
   resize();
   return () => {
     disposed = true;
@@ -503,7 +538,8 @@ export function mountSiteBackground(
     window.removeEventListener("blur", leave);
     window.removeEventListener("resize", resize);
     window.removeEventListener("scroll", scroll);
-    motion.removeEventListener("change", updateMotion);
+    if (respectReducedMotion)
+      motion.removeEventListener("change", updateMotion);
     layer.replaceChildren();
     interactiveLayer.replaceChildren();
     delete svg.dataset.motion;
