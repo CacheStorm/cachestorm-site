@@ -8,9 +8,7 @@ import {
 
 const NS = "http://www.w3.org/2000/svg";
 const CONTROL =
-  "a,button,input,textarea,select,label,summary,dialog,[role='button'],[role='link'],[role='tab'],[role='radio'],[role='checkbox'],[role='switch'],[role='slider'],[role='menuitem'],[contenteditable]:not([contenteditable='false']),.site-header,.docs-sidebar,pre,code";
-const QUIET =
-  ".hero-copy,.prose,.page-hero,.section-heading,.command-intro,.panel-intro,.docs-sidebar,.doc-content > h1,.doc-description,.faq-section > div:first-child";
+  "a,button,input,textarea,select,label,summary,dialog,[role='dialog'],[role='button'],[role='link'],[role='tab'],[role='radio'],[role='checkbox'],[role='switch'],[role='slider'],[role='menuitem'],[contenteditable]:not([contenteditable='false'])";
 const SHAPES = [
   "M0-1 1 0 0 1-1 0Z",
   "M-1-.6 0-1.2 1-.6 1 .6 0 1.2-1 .6ZM-1-.6 0 0 1-.6M0 0v1.2",
@@ -32,10 +30,15 @@ function set(item: Element, name: string, value: string) {
   previous.set(name, value);
 }
 
-export function mountSiteBackground(svg: SVGSVGElement | null) {
+export function mountSiteBackground(
+  svg: SVGSVGElement | null,
+  interaction: SVGSVGElement | null,
+) {
   const layer = svg?.querySelector<SVGGElement>("[data-field-layer]");
-  const quietLayer = svg?.querySelector<SVGGElement>("[data-field-quiet]");
-  if (!svg || !layer || !quietLayer) return;
+  const interactiveLayer = interaction?.querySelector<SVGGElement>(
+    "[data-field-interactive]",
+  );
+  if (!svg || !layer || !interaction || !interactiveLayer) return;
   const field = new SiteField();
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   let reduced = motion.matches;
@@ -43,8 +46,6 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
   let disposed = false;
   let frame = 0;
   let lastFrame = 0;
-  let quietDirty = true;
-  let quietElements: Element[] = [];
   let down: { x: number; y: number; id: number; moved: boolean } | null = null;
 
   function node<K extends keyof SVGElementTagNameMap>(
@@ -59,11 +60,19 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
   }
   const routes = node("g", { class: "field-routes", fill: "none" });
   const shapes = node("g", { class: "field-shapes", fill: "none" });
-  const links = node("g", { class: "field-links", fill: "none" });
-  const effects = node("g", { class: "field-effects", fill: "none" });
+  const links = node(
+    "g",
+    { class: "field-links", fill: "none" },
+    interactiveLayer,
+  );
+  const effects = node(
+    "g",
+    { class: "field-effects", fill: "none" },
+    interactiveLayer,
+  );
   let routeNodes: SVGPathElement[] = [];
   let shapeNodes: SVGGElement[] = [];
-  const linkNodes = Array.from({ length: 4 }, () =>
+  const linkNodes = Array.from({ length: SITE_FIELD.connections }, () =>
     node(
       "path",
       { opacity: "0", "vector-effect": "non-scaling-stroke" },
@@ -89,31 +98,43 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
       effects,
     ),
   );
-  const quietNodes = Array.from({ length: SITE_FIELD.quietRegions }, () =>
-    node("rect", { fill: "black", opacity: "0", rx: "28" }, quietLayer!),
+  const echoes = node(
+    "g",
+    { class: "field-echoes", fill: "none" },
+    interactiveLayer,
+  );
+  const echoNodes = Array.from({ length: SITE_FIELD.echoes }, () =>
+    node(
+      "path",
+      { opacity: "0", "vector-effect": "non-scaling-stroke" },
+      echoes,
+    ),
+  );
+  const focus = node(
+    "g",
+    { class: "field-focus", opacity: "0" },
+    interactiveLayer,
+  );
+  node(
+    "circle",
+    {
+      r: String(SITE_FIELD.pointerRadius * 0.8),
+      fill: interactiveLayer.getAttribute("data-glow") || "none",
+      stroke: "none",
+    },
+    focus,
+  );
+  node("circle", { r: "23", fill: "none", opacity: ".32" }, focus);
+  const focusArc = node(
+    "path",
+    {
+      d: "M-35 0a35 35 0 0 1 35-35M35 0a35 35 0 0 1-35 35",
+      fill: "none",
+      opacity: ".55",
+    },
+    focus,
   );
 
-  function measureQuiet() {
-    let count = 0;
-    for (const element of quietElements) {
-      if (count === quietNodes.length) break;
-      const rect = element.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > field.height || !rect.width) continue;
-      const item = quietNodes[count++];
-      set(item, "x", n(rect.left - 18));
-      set(item, "y", n(rect.top - 18));
-      set(item, "width", n(rect.width + 36));
-      set(item, "height", n(rect.height + 36));
-      set(item, "opacity", ".87");
-    }
-    for (; count < quietNodes.length; count++)
-      set(quietNodes[count], "opacity", "0");
-    quietDirty = false;
-  }
-  function refreshQuiet() {
-    quietElements = Array.from(document.querySelectorAll(QUIET));
-    quietDirty = true;
-  }
   function edge(x: number, y: number) {
     return Math.max(
       0,
@@ -136,7 +157,6 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
   }
   function render() {
     if (disposed) return;
-    if (quietDirty) measureQuiet();
     const scroll = reduced ? 0 : field.scroll;
     field.routes.forEach((route, i) => {
       const first = projectY(route, route.points[0].y, scroll, field.height);
@@ -158,6 +178,16 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
         );
     });
     let connections = 0;
+    let highlighted = 0;
+    set(focus, "opacity", n(field.pointer.strength));
+    if (field.pointer.strength > 0.01) {
+      set(
+        focus,
+        "transform",
+        `translate(${n(field.pointer.x)} ${n(field.pointer.y)})`,
+      );
+      set(focusArc, "transform", `rotate(${n(field.time * 16)})`);
+    }
     field.packets.forEach((packet, i) => {
       const route = field.routes[packet.route];
       const p = routePoint(route, packet.distance);
@@ -183,11 +213,40 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
         `translate(${n(x)} ${n(y)}) rotate(${n(angle)}) scale(${n(size)})`,
       );
       set(item, "opacity", n(alpha * (0.35 + route.depth * 0.55)));
+      const distance = Math.hypot(x - field.pointer.x, y - field.pointer.y);
+      let reaction =
+        Math.max(0, 1 - distance / SITE_FIELD.pointerRadius) ** 1.4 *
+        field.pointer.strength;
+      for (const ripple of field.ripples) {
+        const t = ripple.age / ripple.life;
+        const radius = easeOut(t) * field.rippleRadius;
+        const waveDistance = Math.hypot(x - ripple.x, y - ripple.y);
+        reaction = Math.max(
+          reaction,
+          Math.max(
+            0,
+            1 - Math.abs(waveDistance - radius) / SITE_FIELD.waveWidth,
+          ) *
+            (1 - t),
+        );
+      }
+      if (
+        reaction > 0.01 &&
+        highlighted < (field.mobile ? 6 : echoNodes.length)
+      ) {
+        const echo = echoNodes[highlighted++];
+        set(echo, "d", SHAPES[i % 5 === 0 ? (i / 5) % SHAPES.length : 0]);
+        set(
+          echo,
+          "transform",
+          `translate(${n(x)} ${n(y)}) rotate(${n(angle)}) scale(${n(Math.max(5, size * 1.18))})`,
+        );
+        set(echo, "opacity", n(alpha * reaction * 0.95));
+      }
       if (
         field.pointer.strength > 0.02 &&
         connections < (field.mobile ? 2 : linkNodes.length)
       ) {
-        const distance = Math.hypot(x - field.pointer.x, y - field.pointer.y);
         if (distance < SITE_FIELD.pointerRadius) {
           const link = linkNodes[connections++];
           set(
@@ -207,6 +266,8 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
         }
       }
     });
+    for (; highlighted < echoNodes.length; highlighted++)
+      set(echoNodes[highlighted], "opacity", "0");
     for (; connections < linkNodes.length; connections++)
       set(linkNodes[connections], "opacity", "0");
     rippleNodes.forEach(([outer, inner], i) => {
@@ -258,9 +319,9 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
       set(
         item,
         "transform",
-        `translate(${n(trail.x)} ${n(trail.y)}) scale(${n(3 + easeOut(t) * 12)})`,
+        `translate(${n(trail.x)} ${n(trail.y)}) scale(${n(4 + easeOut(t) * 18)})`,
       );
-      set(item, "opacity", n(edge(trail.x, trail.y) * (1 - t) ** 2 * 0.4));
+      set(item, "opacity", n(edge(trail.x, trail.y) * (1 - t) ** 2 * 0.7));
     });
   }
   function tick(now: number) {
@@ -283,7 +344,7 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
     cancelAnimationFrame(frame);
     frame = 0;
     lastFrame = 0;
-    svg!.dataset.motion =
+    svg!.dataset.motion = interaction!.dataset.motion =
       !visible || document.hidden ? "paused" : reduced ? "reduced" : "running";
     if (!visible || document.hidden || disposed) {
       field.leave();
@@ -302,6 +363,7 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
     field.resize(bounds.width, bounds.height);
     field.scroll = field.scrollTarget = reduced ? 0 : window.scrollY;
     set(svg!, "viewBox", `0 0 ${n(field.width)} ${n(field.height)}`);
+    set(interaction!, "viewBox", `0 0 ${n(field.width)} ${n(field.height)}`);
     routes.replaceChildren();
     shapes.replaceChildren();
     routeNodes = field.routes.map(() => node("path", {}, routes));
@@ -327,7 +389,6 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
         );
       return group;
     });
-    refreshQuiet();
     render();
     sync();
   }
@@ -337,7 +398,7 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
   function move(event: PointerEvent) {
     if (down && Math.hypot(event.clientX - down.x, event.clientY - down.y) > 8)
       down.moved = true;
-    if (reduced || event.pointerType === "touch" || blocked(event)) {
+    if (reduced || event.pointerType === "touch") {
       field.leave();
       return;
     }
@@ -373,11 +434,6 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
     )
       return;
     if (
-      event.target instanceof Element &&
-      event.target.closest("h1,h2,h3,p,pre,code")
-    )
-      return;
-    if (
       Math.hypot(event.clientX - candidate.x, event.clientY - candidate.y) <= 8
     )
       field.burst(event.clientX, event.clientY);
@@ -388,8 +444,10 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
   }
   function scroll() {
     field.scrollTarget = window.scrollY;
-    quietDirty = true;
-    leave();
+    down = null;
+    // Client coordinates stay viewport-relative even while the document scrolls.
+    if (!reduced && field.pointer.inside)
+      field.move(field.pointer.x, field.pointer.y);
     if (reduced && visible && !document.hidden) render();
   }
   function updateMotion() {
@@ -398,23 +456,25 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
     field.scroll = field.scrollTarget = reduced ? 0 : window.scrollY;
     sync();
   }
-  function changed() {
-    refreshQuiet();
-    if (reduced && visible && !document.hidden) render();
-  }
   const intersection = new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
     sync();
   });
   const size = new ResizeObserver(resize);
-  const content = new MutationObserver(changed);
-  const main = document.querySelector("main");
-  if (main) content.observe(main, { childList: true, subtree: true });
   intersection.observe(svg);
   size.observe(svg);
-  document.addEventListener("pointermove", move, { passive: true });
-  document.addEventListener("pointerdown", pointerDown, { passive: true });
-  document.addEventListener("pointerup", pointerUp, { passive: true });
+  document.addEventListener("pointermove", move, {
+    passive: true,
+    capture: true,
+  });
+  document.addEventListener("pointerdown", pointerDown, {
+    passive: true,
+    capture: true,
+  });
+  document.addEventListener("pointerup", pointerUp, {
+    passive: true,
+    capture: true,
+  });
   document.addEventListener("pointercancel", leave);
   document.addEventListener("pointerleave", leave);
   document.addEventListener("visibilitychange", sync);
@@ -428,10 +488,9 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
     cancelAnimationFrame(frame);
     intersection.disconnect();
     size.disconnect();
-    content.disconnect();
-    document.removeEventListener("pointermove", move);
-    document.removeEventListener("pointerdown", pointerDown);
-    document.removeEventListener("pointerup", pointerUp);
+    document.removeEventListener("pointermove", move, { capture: true });
+    document.removeEventListener("pointerdown", pointerDown, { capture: true });
+    document.removeEventListener("pointerup", pointerUp, { capture: true });
     document.removeEventListener("pointercancel", leave);
     document.removeEventListener("pointerleave", leave);
     document.removeEventListener("visibilitychange", sync);
@@ -440,7 +499,8 @@ export function mountSiteBackground(svg: SVGSVGElement | null) {
     window.removeEventListener("scroll", scroll);
     motion.removeEventListener("change", updateMotion);
     layer.replaceChildren();
-    quietLayer.replaceChildren();
+    interactiveLayer.replaceChildren();
     delete svg.dataset.motion;
+    delete interaction.dataset.motion;
   };
 }

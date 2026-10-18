@@ -87,7 +87,8 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
     motion = new Target(),
     svg = new Target(),
     layer = new Target(),
-    quiet = new Target(),
+    interactive = new Target(),
+    interaction = new Target(),
     main = new Target();
   const raf = new Map(),
     observers = [];
@@ -96,7 +97,8 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
     currentWidth = width;
   motion.matches = reduced;
   svg.querySelector = (selector) =>
-    missingLayer ? null : selector.includes("data-field-layer") ? layer : quiet;
+    missingLayer ? null : selector.includes("data-field-layer") ? layer : null;
+  interaction.querySelector = () => (missingLayer ? null : interactive);
   svg.getBoundingClientRect = () => ({
     left: 0,
     top: 0,
@@ -184,7 +186,8 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
     motion,
     svg,
     layer,
-    quiet,
+    interactive,
+    interaction,
     raf,
     observers,
     flush,
@@ -195,13 +198,16 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
       win.dispatchEvent(new Event("resize"));
     },
     get writes() {
-      return [...descendants(layer), ...descendants(quiet)].reduce(
+      return [...descendants(layer), ...descendants(interactive)].reduce(
         (sum, node) => sum + node.writes,
         0,
       );
     },
+    get rendered() {
+      return [...descendants(layer), ...descendants(interactive)];
+    },
     get rings() {
-      return descendants(layer).filter(
+      return descendants(interactive).filter(
         (node) =>
           node.getAttribute("class") === "field-ripple" &&
           Number(node.getAttribute("opacity")) > 0,
@@ -210,11 +216,46 @@ function browser({ reduced = false, missingLayer = false, width = 1440 } = {}) {
   };
 }
 
+test("pointer traces continue over controls while control clicks stay excluded", () => {
+  const env = browser();
+  let cleanup;
+  const traces = () =>
+    env.rendered.filter(
+      (node) =>
+        node.getAttribute("class") === "field-trail" &&
+        Number(node.getAttribute("opacity")) > 0,
+    );
+  try {
+    cleanup = mountSiteBackground(env.svg, env.interaction);
+    env.observers[0].callback([{ isIntersecting: true }]);
+    env.pointer("pointermove", { x: 700, y: 400 });
+    env.flush(8);
+    assert.ok(
+      traces().length > 0,
+      "ordinary content still produces pointer traces",
+    );
+    env.flush(120);
+    env.pointer("pointermove", { control: true });
+    env.flush(8);
+    assert.ok(
+      traces().length > 0,
+      "moving over controls must keep pointer traces alive",
+    );
+    env.pointer("pointerdown", { control: true });
+    env.pointer("pointerup", { control: true });
+    env.flush(8);
+    assert.equal(env.rings, 0);
+  } finally {
+    cleanup?.();
+    env.restore();
+  }
+});
+
 test("offscreen, hidden and reduced-motion backgrounds stop scheduling and resume", () => {
   const env = browser();
   let cleanup;
   try {
-    cleanup = mountSiteBackground(env.svg);
+    cleanup = mountSiteBackground(env.svg, env.interaction);
     assert.equal(env.raf.size, 0);
     env.observers[0].callback([{ isIntersecting: true }]);
     env.flush(8);
@@ -249,14 +290,14 @@ test("offscreen, hidden and reduced-motion backgrounds stop scheduling and resum
   }
 });
 
-test("tap emits an SVG wave; controls, text, selection and touch scrolling do not", () => {
+test("tap emits an SVG wave; control clicks, selection and touch scrolling do not", () => {
   const env = browser();
   let cleanup;
   try {
-    cleanup = mountSiteBackground(env.svg);
+    cleanup = mountSiteBackground(env.svg, env.interaction);
     env.observers[0].callback([{ isIntersecting: true }]);
     for (const kind of ["mouse", "touch"]) {
-      for (const option of [{ control: true }, { text: true }]) {
+      for (const option of [{ control: true }]) {
         env.pointer("pointerdown", { kind, ...option });
         env.pointer("pointerup", { kind, ...option });
       }
@@ -297,7 +338,7 @@ test("reduced-motion initial load is static and ignores interactions", () => {
   const env = browser({ reduced: true });
   let cleanup;
   try {
-    cleanup = mountSiteBackground(env.svg);
+    cleanup = mountSiteBackground(env.svg, env.interaction);
     env.observers[0].callback([{ isIntersecting: true }]);
     const before = env.writes;
     env.pointer("pointerdown");
@@ -319,19 +360,19 @@ test("SVG pools stay bounded under resize and a click storm, and clean up on unm
   const env = browser({ width: 3840 });
   let cleanup;
   try {
-    cleanup = mountSiteBackground(env.svg);
+    cleanup = mountSiteBackground(env.svg, env.interaction);
     env.observers[0].callback([{ isIntersecting: true }]);
-    const count = descendants(env.layer).length;
+    const count = env.rendered.length;
     for (let i = 0; i < 200; i++) {
       env.pointer("pointerdown");
       env.pointer("pointerup");
     }
     env.flush(8);
-    assert.equal(descendants(env.layer).length, count);
-    assert.ok(count < 300);
+    assert.equal(env.rendered.length, count);
+    assert.ok(count < 400);
     for (const width of [375, 1024, 3840, 375]) {
       env.resize(width);
-      assert.ok(descendants(env.layer).length < 300);
+      assert.ok(env.rendered.length < 400);
     }
     cleanup();
     cleanup = null;
@@ -339,14 +380,19 @@ test("SVG pools stay bounded under resize and a click storm, and clean up on unm
     assert.ok(env.observers.every((observer) => observer.disconnected));
     for (const target of [env.doc, env.win, env.motion])
       assert.equal(target.listeners.size, 0);
-    assert.equal(env.layer.children.length + env.quiet.children.length, 0);
+    assert.equal(
+      env.layer.children.length + env.interactive.children.length,
+      0,
+    );
     env.resize(1024);
     // A queued observer callback after unmount must not resurrect SVG nodes.
     env.observers[0].callback([{ isIntersecting: true }]);
     env.observers[1].callback();
-    env.observers[2].callback();
     env.flush(8);
-    assert.equal(env.layer.children.length + env.quiet.children.length, 0);
+    assert.equal(
+      env.layer.children.length + env.interactive.children.length,
+      0,
+    );
     assert.equal(env.raf.size, 0);
     assert.equal(env.svg.dataset.motion, undefined);
   } finally {
@@ -355,22 +401,73 @@ test("SVG pools stay bounded under resize and a click storm, and clean up on unm
   }
 });
 
-test("scroll and route content changes refresh the reading mask without remounting", () => {
+test("pointer light stays at client coordinates while scrolling across content", () => {
   const env = browser();
   let cleanup;
   try {
-    cleanup = mountSiteBackground(env.svg);
+    cleanup = mountSiteBackground(env.svg, env.interaction);
     env.observers[0].callback([{ isIntersecting: true }]);
-    const groups = env.layer.children.slice();
-    const before = env.quiet.children[0].getAttribute("y");
-    env.win.scrollY = 400;
+    env.pointer("pointermove", { x: 700, y: 400, text: true });
+    env.flush(20);
+    const focus = env.rendered.find(
+      (node) => node.getAttribute("class") === "field-focus",
+    );
+    assert.equal(focus.getAttribute("transform"), "translate(700.00 400.00)");
+    env.win.scrollY = 4000;
     env.win.dispatchEvent(new Event("scroll"));
+    env.flush(20);
+    assert.equal(focus.getAttribute("transform"), "translate(700.00 400.00)");
+    assert.ok(Number(focus.getAttribute("opacity")) > 0.8);
+    env.pointer("pointerdown", { x: 700, y: 400, text: true });
+    env.pointer("pointerup", { x: 700, y: 400, text: true });
     env.flush(8);
-    assert.notEqual(env.quiet.children[0].getAttribute("y"), before);
-    env.observers[2].callback();
-    env.flush(8);
-    assert.deepEqual(env.layer.children, groups);
+    const wave = env.rendered.find(
+      (node) =>
+        node.getAttribute("class") === "field-ripple" &&
+        Number(node.getAttribute("opacity")) > 0,
+    );
+    assert.equal(wave.getAttribute("transform"), "translate(700.00 400.00)");
     assert.equal(env.raf.size, 1);
+  } finally {
+    cleanup?.();
+    env.restore();
+  }
+});
+
+test("all interactive visuals use the unmasked foreground and expire naturally", () => {
+  const env = browser();
+  let cleanup;
+  try {
+    cleanup = mountSiteBackground(env.svg, env.interaction);
+    env.observers[0].callback([{ isIntersecting: true }]);
+    env.pointer("pointermove");
+    env.pointer("pointerdown");
+    env.pointer("pointerup");
+    env.flush(12);
+    const front = descendants(env.interactive);
+    assert.ok(
+      front.some(
+        (node) =>
+          node.getAttribute("class") === "field-ripple" &&
+          Number(node.getAttribute("opacity")) > 0,
+      ),
+    );
+    for (const item of front) assert.equal(item.getAttribute("mask"), null);
+    assert.ok(
+      descendants(env.layer).every(
+        (node) =>
+          !["field-effects", "field-links", "field-focus"].includes(
+            node.getAttribute("class"),
+          ),
+      ),
+    );
+    env.pointer("pointerleave");
+    env.flush(240);
+    assert.equal(env.rings, 0);
+    const focus = front.find(
+      (node) => node.getAttribute("class") === "field-focus",
+    );
+    assert.equal(Number(focus.getAttribute("opacity")), 0);
   } finally {
     cleanup?.();
     env.restore();
@@ -380,7 +477,7 @@ test("scroll and route content changes refresh the reading mask without remounti
 test("missing SVG slots leave the server-rendered page usable", () => {
   const env = browser({ missingLayer: true });
   try {
-    assert.equal(mountSiteBackground(env.svg), undefined);
+    assert.equal(mountSiteBackground(env.svg, env.interaction), undefined);
     assert.equal(mountSiteBackground(null), undefined);
     assert.equal(env.raf.size, 0);
     assert.equal(env.observers.length, 0);

@@ -52,9 +52,11 @@ When updating product content, pin a new upstream commit, recheck configuration 
 - Copy errors are announced, and users can manually select code.
 - Motion respects `prefers-reduced-motion`. Content is server-rendered and remains visible without animation.
 
-The shared layout mounts one decorative SVG background for every route. Circuit lines, outlined memory cells and lightning shapes continue behind the hero, content and footer. `SITE_FIELD` in `src/lib/site-field.ts` owns density, motion speed, depth, interaction radii and effect lifetimes. The SVG renderer uses fixed element pools and updates attributes outside React; scrolling adds gentle depth-dependent parallax without creating a document-sized SVG. Reading masks follow visible prose, and cards keep their opaque surfaces.
+The shared layout mounts two viewport-fixed decorative SVG layers for every route. Quiet circuit lines, memory cells and lightning shapes sit behind the content; pointer light, local shape highlights, trails and click waves sit above card surfaces without content masks. Both layers ignore pointer events. Document-level capture listeners keep tracking over text and controls, while control clicks, text selection and touch scrolling never trigger bursts. Client coordinates keep the pointer light anchored during scrolling.
 
-`npm run test:background` checks local pointer forces, bounded effects and expiry, tap filtering, touch scrolling, time-based movement, visibility/reduced-motion scheduling, SVG element budgets, reading-mask updates and cleanup. Tests use Node's built-in runner and the existing TypeScript compiler. No animation dependencies are added.
+`SITE_FIELD` in `src/lib/site-field.ts` owns density, motion speed, depth, interaction radii and effect lifetimes. The SVG renderer uses fixed element pools and cached attribute updates outside React. Scrolling adds gentle depth-dependent parallax without creating a document-sized SVG. Mobile density is lower; hidden and reduced-motion scenes stop scheduling frames. Theme-aware, low-opacity strokes preserve reading contrast without rectangular reading masks.
+
+`npm run test:background` checks local pointer forces, bounded effects and expiry, tracking over controls, tap filtering, touch scrolling, time-based movement, visibility/reduced-motion scheduling, SVG element budgets, mask-free foreground placement, scroll coordinates and cleanup. Tests use Node's built-in runner and the existing TypeScript compiler. No animation dependencies are added.
 
 ## Responsive layout
 

@@ -9,14 +9,19 @@ export const SITE_FIELD = {
   parallax: 0.07,
   overscan: 90,
   symbolScale: 3.8,
-  quietRegions: 16,
+  echoes: 12,
+  connections: 6,
   idleAfter: 5,
-  pointerRadius: 170,
-  displacement: 30,
+  pointerRadius: 270,
+  displacement: 68,
+  swirl: 22,
+  maxOffset: 96,
+  waveWidth: 64,
+  waveForce: 44,
   edgeFade: 64,
-  ripples: { max: 6, life: 1.8, radius: 235, mobileRadius: 145 },
-  sparks: { max: 60, mobileMax: 24, perClick: 10, life: 1.1 },
-  trails: { max: 12, life: 0.65, spacing: 22 },
+  ripples: { max: 6, life: 1.65, radius: 320, mobileRadius: 190 },
+  sparks: { max: 60, mobileMax: 24, perClick: 14, life: 1.1 },
+  trails: { max: 20, life: 0.85, spacing: 10 },
 } as const;
 
 export type Point = { x: number; y: number };
@@ -188,7 +193,7 @@ export class SiteField {
     const count = this.mobile ? 6 : SITE_FIELD.sparks.perClick;
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2 + variant * 0.3;
-      const speed = 40 + (i % 3) * 24;
+      const speed = 100 + (i % 3) * 42;
       this.sparks.push({
         x,
         y,
@@ -243,20 +248,28 @@ export class SiteField {
         (dx / Math.max(1, distance)) * influence * SITE_FIELD.displacement;
       let oy =
         (dy / Math.max(1, distance)) * influence * SITE_FIELD.displacement;
+      ox += (-dy / Math.max(1, distance)) * influence * SITE_FIELD.swirl;
+      oy += (dx / Math.max(1, distance)) * influence * SITE_FIELD.swirl;
       for (const ripple of this.ripples) {
         const radius = easeOut(ripple.age / ripple.life) * this.rippleRadius;
         const rx = p.x - ripple.x;
         const ry = screenY - ripple.y;
         const rd = Math.hypot(rx, ry);
         const force =
-          clamp(1 - Math.abs(rd - radius) / 38) *
+          clamp(1 - Math.abs(rd - radius) / SITE_FIELD.waveWidth) *
           (1 - ripple.age / ripple.life) *
-          14;
+          SITE_FIELD.waveForce;
         ox += (rx / Math.max(1, rd)) * force;
         oy += (ry / Math.max(1, rd)) * force;
       }
-      packet.offset.x += (clamp(ox, -40, 40) - packet.offset.x) * mix;
-      packet.offset.y += (clamp(oy, -40, 40) - packet.offset.y) * mix;
+      packet.offset.x +=
+        (clamp(ox, -SITE_FIELD.maxOffset, SITE_FIELD.maxOffset) -
+          packet.offset.x) *
+        mix;
+      packet.offset.y +=
+        (clamp(oy, -SITE_FIELD.maxOffset, SITE_FIELD.maxOffset) -
+          packet.offset.y) *
+        mix;
     }
     this.ripples = this.ripples.filter((r) => (r.age += dt) < r.life);
     this.trails = this.trails.filter((r) => (r.age += dt) < r.life);
