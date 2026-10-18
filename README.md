@@ -58,6 +58,8 @@ The shared layout mounts two viewport-fixed decorative SVG layers for every rout
 
 Nearby shapes follow softly breathing orbits at different speeds, using critically damped springs to absorb pointer changes. Click wavefronts light up shapes and trigger smaller local waves, with at most two relay generations. Each click has a shared propagation budget; relay opacity falls to 42% per generation. Desktop keeps at most eight local waves, mobile three, and all effects expire without timers or additional React renders.
 
+Pointer travel adds a capped, smoothly decaying current to the orbits. Travel is accumulated per animation frame, so pointer-event coalescing and scroll refreshes cannot amplify it. Shapes vary their orbit direction and rhythm; connector curves breathe gently and circular waves stretch slightly as they fade. These refinements reuse the existing SVG pools and reduce connector opacity over content.
+
 `npm run test:background` checks local pointer forces, ongoing orbits and spring continuity, relay depth and mobile budgets, bounded effects and expiry, tracking over controls, tap filtering, touch scrolling, time-based movement, visibility/reduced-motion scheduling, SVG element budgets, mask-free foreground placement, scroll coordinates and cleanup. Tests use Node's built-in runner and the existing TypeScript compiler. No animation dependencies are added.
 
 ## Responsive layout

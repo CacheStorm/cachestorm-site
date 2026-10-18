@@ -141,16 +141,8 @@ export function mountSiteBackground(
       ),
     );
   }
-  function ringPath(radius: number, hex: boolean) {
-    if (!hex)
-      return `M${n(radius)} 0a${n(radius)} ${n(radius)} 0 1 0 ${n(-radius * 2)} 0a${n(radius)} ${n(radius)} 0 1 0 ${n(radius * 2)} 0`;
-    return (
-      Array.from(
-        { length: 6 },
-        (_, i) =>
-          `${i ? "L" : "M"}${n(Math.cos((i * Math.PI) / 3) * radius)} ${n(Math.sin((i * Math.PI) / 3) * radius)}`,
-      ).join("") + "Z"
-    );
+  function ringPath(radius: number) {
+    return `M${n(radius)} 0a${n(radius)} ${n(radius)} 0 1 0 ${n(-radius * 2)} 0a${n(radius)} ${n(radius)} 0 1 0 ${n(radius * 2)} 0`;
   }
   function render() {
     if (disposed) return;
@@ -249,10 +241,11 @@ export function mountSiteBackground(
       ) {
         if (distance < SITE_FIELD.pointerRadius) {
           const link = linkNodes[connections++];
+          const bend = 0.16 + Math.sin(field.time * 0.8 + packet.phase) * 0.05;
           set(
             link,
             "d",
-            `M${n(x)} ${n(y)}Q${n((x + field.pointer.x) / 2 - (y - field.pointer.y) * 0.18)} ${n((y + field.pointer.y) / 2 + (x - field.pointer.x) * 0.18)} ${n(field.pointer.x)} ${n(field.pointer.y)}`,
+            `M${n(x)} ${n(y)}Q${n((x + field.pointer.x) / 2 - (y - field.pointer.y) * bend)} ${n((y + field.pointer.y) / 2 + (x - field.pointer.x) * bend)} ${n(field.pointer.x)} ${n(field.pointer.y)}`,
           );
           set(
             link,
@@ -260,7 +253,8 @@ export function mountSiteBackground(
             n(
               (1 - distance / SITE_FIELD.pointerRadius) *
                 field.pointer.strength *
-                alpha,
+                alpha *
+                0.8,
             ),
           );
         }
@@ -280,6 +274,12 @@ export function mountSiteBackground(
       const t = ripple.age / ripple.life;
       const radius = 3 + easeOut(t) * ripple.radius;
       set(group, "transform", `translate(${n(ripple.x)} ${n(ripple.y)})`);
+      const breathing = Math.sin(t * Math.PI);
+      set(
+        outer,
+        "transform",
+        `scale(${n(1 + breathing * 0.02)} ${n(1 - breathing * 0.015)})`,
+      );
       set(group, "data-generation", String(ripple.generation));
       set(
         group,
@@ -287,13 +287,13 @@ export function mountSiteBackground(
         n((1 - t) ** 2 * Math.min(1, t * 16) * ripple.gain),
       );
       set(inner, "opacity", ripple.generation ? "0" : ".45");
-      set(outer, "d", ringPath(radius, ripple.variant === 1));
+      set(outer, "d", ringPath(radius));
       set(
         inner,
         "d",
         ringPath(
-          radius * (ripple.variant === 2 ? 0.65 : 0.9),
-          ripple.variant === 1,
+          radius *
+            (ripple.variant === 2 ? 0.65 : ripple.variant === 1 ? 0.82 : 0.9),
         ),
       );
     });

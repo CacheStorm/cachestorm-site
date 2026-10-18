@@ -155,6 +155,56 @@ test("orbital springs follow the same path at 30, 60 and 144Hz", () => {
     );
 });
 
+test("pointer flow follows travel direction, ignores entry jumps and settles", () => {
+  const field = stillPackets([700, 1200]);
+  field.move(600, 400);
+  advance(field, 0.5);
+  assert.equal(
+    field.flow?.x,
+    0,
+    "entering the viewport must not create a velocity spike",
+  );
+  for (let i = 1; i <= 30; i++) {
+    field.move(600 + i * 2, 400);
+    field.step(1 / 60);
+  }
+  assert.ok(field.flow.x > 100 && field.flow.x < 130);
+  assert.equal(field.flow.y, 0);
+  assert.ok(
+    Math.hypot(field.packets[1].offset.x, field.packets[1].offset.y) < 0.001,
+  );
+  // Scroll refreshes the same client position and must not add any flow.
+  for (let i = 0; i < 180; i++) {
+    field.move(660, 400);
+    field.step(1 / 60);
+  }
+  assert.ok(Math.hypot(field.flow.x, field.flow.y) < 0.001);
+  field.move(610, 400);
+  field.step(1 / 60);
+  assert.ok(field.flow.x < 0);
+  field.clearInteraction();
+  assert.deepEqual(field.flow, { x: 0, y: 0 });
+});
+
+test("pointer flow is bounded and independent of event coalescing and refresh rate", () => {
+  const velocities = [30, 60, 144].map((fps) => {
+    const field = stillPackets([700]);
+    field.move(600, 400);
+    for (let i = 1; i <= fps; i++) {
+      const x = 600 + (i / fps) * 120;
+      field.move(x - 0.1, 400);
+      field.move(x, 400);
+      field.step(1 / fps);
+    }
+    assert.ok(field.flow.x > 119 && field.flow.x <= 120);
+    field.move(100000, 100000);
+    field.step(1 / fps);
+    assert.ok(Math.hypot(field.flow.x, field.flow.y) <= SITE_FIELD.flowSpeed);
+    return field.flow;
+  });
+  assert.equal(velocities.length, 3);
+});
+
 test("packet budgets remain bounded from mobile through 4K", () => {
   for (const width of [375, 768, 1024, 1440, 1920, 2560, 3840]) {
     const field = scene(width);

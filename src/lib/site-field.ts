@@ -16,6 +16,9 @@ export const SITE_FIELD = {
   orbitSpeed: 1,
   orbitRadius: 32,
   spring: 7.5,
+  flowSpeed: 450,
+  flowResponse: 9,
+  flowDrag: 0.055,
   maxOffset: 96,
   waveWidth: 64,
   waveForce: 44,
@@ -112,6 +115,7 @@ export class SiteField {
   scroll = 0;
   scrollTarget = 0;
   pointer = { x: -1000, y: -1000, inside: false, strength: 0 };
+  flow: Point = { x: 0, y: 0 };
   routes: Route[] = [];
   packets: Packet[] = [];
   ripples: Ripple[] = [];
@@ -122,6 +126,7 @@ export class SiteField {
   private lastClick = -100;
   private clickSequence = 0;
   private lastTrail: Point = { x: -1000, y: -1000 };
+  private travel: Point = { x: 0, y: 0 };
 
   resize(width: number, height: number) {
     this.width = Math.max(1, width);
@@ -192,6 +197,10 @@ export class SiteField {
   }
 
   move(x: number, y: number) {
+    if (this.pointer.inside) {
+      this.travel.x += x - this.pointer.x;
+      this.travel.y += y - this.pointer.y;
+    }
     this.pointer.x = x;
     this.pointer.y = y;
     this.pointer.inside = true;
@@ -208,6 +217,8 @@ export class SiteField {
 
   leave() {
     this.pointer.inside = false;
+    this.travel.x = this.travel.y = 0;
+    this.flow.x = this.flow.y = 0;
     this.lastTrail = { x: -1000, y: -1000 };
   }
 
@@ -261,6 +272,8 @@ export class SiteField {
     this.trails = [];
     this.pointer.inside = false;
     this.pointer.strength = 0;
+    this.travel.x = this.travel.y = 0;
+    this.flow.x = this.flow.y = 0;
     this.intensity = 0;
     this.lastInteraction = -100;
     this.lastClick = -100;
@@ -297,6 +310,16 @@ export class SiteField {
     this.time += dt;
     const awake = this.time - this.lastInteraction < SITE_FIELD.idleAfter;
     const mix = 1 - Math.exp(-dt * 5);
+    if (dt > 0) {
+      // Accumulate events until the next frame, so coalescing cannot amplify flow.
+      const speed = Math.hypot(this.travel.x, this.travel.y) / dt;
+      const scale =
+        speed > SITE_FIELD.flowSpeed ? SITE_FIELD.flowSpeed / speed : 1;
+      const follow = 1 - Math.exp(-dt * SITE_FIELD.flowResponse);
+      this.flow.x += ((this.travel.x / dt) * scale - this.flow.x) * follow;
+      this.flow.y += ((this.travel.y / dt) * scale - this.flow.y) * follow;
+      this.travel.x = this.travel.y = 0;
+    }
     this.scroll += (this.scrollTarget - this.scroll) * mix;
     this.intensity += ((awake ? 1 : 0) - this.intensity) * mix;
     this.pointer.strength +=
@@ -320,13 +343,24 @@ export class SiteField {
       const angle =
         Math.atan2(dy, dx) +
         packet.phase +
-        this.time * SITE_FIELD.orbitSpeed * (0.75 + route.depth * 0.4) +
-        Math.sin(this.time * 0.6 + packet.phase) * 0.12;
+        this.time *
+          SITE_FIELD.orbitSpeed *
+          (0.75 + route.depth * 0.4) *
+          (1 + Math.sin(packet.phase) * 0.12) *
+          (Math.cos(packet.phase) < 0 ? -1 : 1) +
+        Math.sin(this.time * 0.6 + packet.phase) * 0.12 +
+        ((dx * this.flow.y - dy * this.flow.x) /
+          (Math.max(1, distance) * SITE_FIELD.flowSpeed)) *
+          0.4;
       const orbit =
         (SITE_FIELD.orbitRadius + distance * 0.5) *
         (1 + Math.sin(this.time * 1.2 + packet.phase) * 0.08);
-      let ox = (Math.cos(angle) * orbit - dx) * influence;
-      let oy = (Math.sin(angle) * orbit - dy) * influence;
+      let ox =
+        (Math.cos(angle) * orbit - dx + this.flow.x * SITE_FIELD.flowDrag) *
+        influence;
+      let oy =
+        (Math.sin(angle) * orbit - dy + this.flow.y * SITE_FIELD.flowDrag) *
+        influence;
       packet.pulse *= Math.exp(-dt * 4);
       const point = this.position(packet);
       for (const ripple of waves) {
