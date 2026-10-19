@@ -1,4 +1,5 @@
 @import "@fontsource-variable/manrope";
+@import "@fontsource-variable/space-grotesk";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "../app-theme.css";
 
@@ -18,7 +19,6 @@
   --art-top: light-dark(#f1f7ff, #1d3554);
   --art-side: light-dark(#d2e2f8, #152844);
   --art-ink: light-dark(#27558a, #c2ddff);
-  --oxog-purple: light-dark(#692d91, #a35adb);
   --mono: "IBM Plex Mono", monospace;
   --font: "Manrope Variable", Arial, sans-serif;
   --surface-soft: var(--soft);
@@ -1543,139 +1543,6 @@ kbd {
 .footer-columns a:hover {
   color: var(--blue);
 }
-.studio-card {
-  display: grid;
-  grid-template-columns: 145px minmax(0, 1fr) 210px;
-  align-items: center;
-  gap: 38px;
-  padding: 40px;
-  margin-top: 60px;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  position: relative;
-  overflow: hidden;
-  background: var(--surface);
-}
-.studio-card > * {
-  position: relative;
-}
-.studio-card > .studio-glow {
-  position: absolute;
-  right: -120px;
-  top: -140px;
-  width: 360px;
-  height: 360px;
-  background: radial-gradient(circle, #ed087819, transparent 65%);
-  pointer-events: none;
-}
-.studio-logo {
-  display: block;
-  width: 145px;
-}
-.oxog-symbol {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.oxog-symbol.draw path {
-  stroke-dasharray: 400;
-  animation: draw 1.6s cubic-bezier(0.6, 0.1, 0.2, 1) both;
-}
-.oxog-symbol.draw path:nth-child(2) {
-  animation-delay: 0.25s;
-}
-.oxog-symbol.draw path:nth-child(3) {
-  animation-delay: 0.5s;
-}
-.oxog-symbol.draw path:nth-child(4) {
-  animation-delay: 0.9s;
-}
-.studio-copy > p {
-  font-size: 12px;
-  line-height: 1.9;
-  max-width: 500px;
-}
-.studio-copy > p:first-child {
-  font-size: 11px;
-}
-.oxog-wordmark {
-  font-size: 39px;
-  font-weight: 750;
-  letter-spacing: -0.055em;
-  display: inline-flex;
-  align-items: baseline;
-  line-height: 1.4;
-  margin-bottom: 9px;
-}
-.oxog-wordmark > span {
-  font-weight: 400;
-  opacity: 0.6;
-}
-.oxog-wordmark > b {
-  color: #ed0878;
-  font-weight: 700;
-}
-.oxog-wordmark > svg {
-  align-self: center;
-  margin-left: 10px;
-  color: var(--muted);
-  transition: transform 0.2s;
-}
-.oxog-wordmark:hover > svg {
-  transform: translate(3px, -3px);
-}
-.studio-explore {
-  font-size: 10px;
-  color: var(--blue);
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 12px;
-}
-.studio-projects {
-  display: grid;
-  gap: 7px;
-}
-.studio-projects a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 8px 12px;
-  transition: border-color 0.2s;
-}
-.studio-projects a:hover {
-  border-color: #ed0878;
-}
-.studio-projects strong {
-  font-size: 11px;
-  display: block;
-  font-weight: 600;
-}
-.studio-projects small {
-  font-size: 9px;
-  display: block;
-  color: var(--muted);
-}
-.studio-projects svg {
-  color: var(--muted);
-}
-.footer-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 27px 0;
-  font-size: 9px;
-  color: var(--muted);
-}
-.footer-bottom a {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
 /* Interior pages and documentation */
 .page-hero {
   padding-top: clamp(64px, 5vw, 96px);
@@ -2224,11 +2091,12 @@ kbd {
     opacity: 0.85;
   }
 }
-@keyframes draw {
-  from {
-    stroke-dashoffset: 400;
+@keyframes oxog-draw {
+  0% {
+    stroke-dashoffset: 400px;
   }
-  to {
+  33%,
+  100% {
     stroke-dashoffset: 0;
   }
 }
@@ -2336,7 +2204,7 @@ kbd {
     .faq-section,
     .footer-top,
     .footer-columns,
-    .studio-card,
+    .studio,
     .feature-detail,
     .docs-shell,
     .docs-index-grid,
@@ -2458,15 +2326,6 @@ kbd {
     column-gap: var(--layout-gap);
     align-items: start;
   }
-  .studio-card {
-    grid-template-columns: 145px minmax(0, 1.25fr) minmax(0, 1fr);
-    gap: var(--layout-gap);
-    padding: var(--panel-space);
-  }
-  .studio-projects {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
 }
 @media (min-width: 1600px) {
   .hero-description {
@@ -2541,14 +2400,6 @@ kbd {
   }
   .setup-grid {
     gap: 50px;
-  }
-  .studio-card {
-    grid-template-columns: 110px 1fr 180px;
-    gap: 25px;
-    padding: 30px;
-  }
-  .studio-logo {
-    width: 110px;
   }
   .docs-shell {
     gap: 38px;
@@ -2758,23 +2609,6 @@ kbd {
   .footer-top {
     grid-template-columns: 0.8fr 1.2fr;
     gap: 30px;
-  }
-  .studio-card {
-    grid-template-columns: 110px 1fr;
-  }
-  .studio-projects {
-    grid-column: 1/-1;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-  .studio-projects a {
-    padding: 10px;
-  }
-  .studio-projects svg {
-    display: none;
-  }
-  .footer-bottom {
-    flex-wrap: wrap;
   }
   .feature-detail {
     gap: 40px;
@@ -3255,45 +3089,6 @@ kbd {
     font-size: 10px;
     line-height: 1.8;
   }
-  .studio-card {
-    margin-top: 35px;
-    grid-template-columns: 1fr;
-    gap: 22px;
-    padding: 26px;
-    border-radius: 18px;
-  }
-  .studio-logo {
-    width: 100px;
-  }
-  .studio-copy > p {
-    font-size: 12px;
-  }
-  .studio-copy > p:first-child {
-    font-size: 10px;
-  }
-  .oxog-wordmark {
-    font-size: 40px;
-  }
-  .studio-projects {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .studio-projects a {
-    padding: 10px 12px;
-  }
-  .studio-projects strong {
-    font-size: 11px;
-  }
-  .studio-projects small {
-    font-size: 8px;
-  }
-  .footer-bottom {
-    font-size: 9px;
-    align-items: flex-start;
-    flex-direction: column;
-    padding: 23px 0;
-    gap: 9px;
-  }
   .page-hero {
     padding-top: 48px;
     padding-bottom: 40px;
@@ -3519,9 +3314,6 @@ kbd {
     transition: none !important;
     scroll-behavior: auto !important;
   }
-  .oxog-symbol path {
-    stroke-dashoffset: 0 !important;
-  }
   .art-layer {
     transform: none !important;
   }
@@ -3565,5 +3357,150 @@ h3 {
   .hero h1 {
     font-size: clamp(48px, 15vw, 78px);
     word-spacing: 0.02em;
+  }
+}
+
+/* OXOG studio band, matching mammothengine.com. */
+.studio {
+  display: flex;
+  align-items: center;
+  gap: clamp(30px, 4vw, 70px);
+  padding: 35px 45px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: radial-gradient(
+    ellipse at 15% 30%,
+    color-mix(in srgb, #ed0878 4%, transparent),
+    transparent 65%
+  );
+}
+.oxog-mark {
+  width: 105px;
+  height: auto;
+}
+.studio .eyebrow {
+  font-size: 8px;
+  margin-bottom: 9px;
+}
+.studio h2 {
+  font-size: 35px;
+}
+.studio h2 > span {
+  color: var(--muted);
+}
+.studio p {
+  font-size: 11px;
+  margin-top: 9px;
+}
+.studio-link {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-left: auto;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--accent);
+}
+.studio:hover {
+  border-color: #ed0878;
+}
+.studio {
+  --muted: light-dark(#65605a, #b5b2b9);
+  --line: light-dark(#ded4c2, #373b50);
+  --accent: light-dark(#333957, #e7d2a4);
+  --oxog-purple: light-dark(#692d91, #b477e4);
+  color: light-dark(#191c32, #f6f0e4);
+  margin-top: 55px;
+  margin-bottom: 35px;
+  font-family: "Manrope Variable", sans-serif;
+}
+.studio > * {
+  min-width: 0;
+}
+.studio .oxog-mark,
+.studio-link > svg {
+  flex-shrink: 0;
+}
+.studio .eyebrow {
+  display: block;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  line-height: 1.6;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+.studio h2 {
+  font-family: "Space Grotesk Variable", sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  word-spacing: normal;
+  line-height: 1.12;
+}
+.studio p {
+  line-height: 1.7;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .studio .oxog-mark path {
+    stroke-dasharray: 400;
+    animation: oxog-draw 6s ease-in-out var(--draw-delay, 0s) infinite;
+    animation-play-state: paused;
+  }
+  .studio[data-visible="true"][data-page-visible="true"] .oxog-mark path {
+    animation-play-state: running;
+  }
+  .oxog-mark path:nth-child(2) {
+    --draw-delay: 0.15s;
+  }
+  .oxog-mark path:nth-child(3) {
+    --draw-delay: 0.3s;
+  }
+  .oxog-mark path:nth-child(4) {
+    --draw-delay: 0.45s;
+  }
+}
+@media (max-width: 1100px) {
+  .studio {
+    padding: 30px;
+    gap: 30px;
+  }
+  .studio h2 {
+    font-size: 29px;
+  }
+}
+@media (max-width: 800px) {
+  .studio {
+    flex-wrap: wrap;
+  }
+  .studio-link {
+    width: 100%;
+    margin: 0;
+    justify-content: end;
+  }
+}
+@media (max-width: 520px) {
+  .studio {
+    padding: 25px;
+    gap: 22px;
+    margin-top: 35px;
+  }
+  .studio .oxog-mark {
+    width: 65px;
+  }
+  .studio > div {
+    flex: 1;
+  }
+  .studio .eyebrow {
+    font-size: 6px;
+  }
+  .studio h2 {
+    font-size: 25px;
+  }
+  .studio h2 > span {
+    display: block;
+  }
+  .studio p {
+    font-size: 9px;
+  }
+  .studio-link {
+    font-size: 10px;
   }
 }

@@ -83,13 +83,13 @@ export function Logo({ large = false }: { large?: boolean }) {
     </span>
   );
 }
-export function OxogMark({ draw = false }: { draw?: boolean }) {
+export function OxogMark() {
   return (
     <svg
       viewBox="0 0 200 130"
       fill="none"
       aria-hidden="true"
-      className={`oxog-symbol ${draw ? "draw" : ""}`}
+      className="oxog-mark"
     >
       <path
         d="M93 56 72 35C49 13 14 24 9 53 3 84 23 104 46 103"
