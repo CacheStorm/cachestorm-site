@@ -491,7 +491,7 @@ kbd {
 .search-shell {
   display: flex;
   flex-direction: column;
-  max-height: inherit;
+  max-height: calc(100dvh - 2 * clamp(12px, 8dvh, 96px) - 2px);
 }
 .search-top {
   display: flex;
@@ -2076,6 +2076,9 @@ input::placeholder {
 .release-entry .text-link {
   margin-top: 14px;
 }
+.release-entry :not(pre) > code {
+  overflow-wrap: anywhere;
+}
 .brand-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2274,6 +2277,7 @@ input::placeholder {
     .faq-section,
     .footer-top,
     .footer-columns,
+    .release-entry,
     .studio,
     .feature-detail,
     .docs-shell,
@@ -2788,7 +2792,8 @@ input::placeholder {
     margin-bottom: 23px;
   }
   .hero .button {
-    padding: 12px 16px;
+    padding: 12px;
+    gap: 8px;
     min-height: 48px;
     font-size: var(--text-sm);
   }

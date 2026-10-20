@@ -21,6 +21,7 @@ export function Navigation() {
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const header = useRef<HTMLElement>(null);
   const searchTrigger = useRef<HTMLButtonElement>(null);
   const searchReturnTarget = useRef<HTMLElement | null>(null);
   const path = usePathname();
@@ -47,6 +48,20 @@ export function Navigation() {
     document.addEventListener("keydown", key);
     return () => document.removeEventListener("keydown", key);
   }, [openSearch]);
+  useEffect(() => {
+    if (!menu) return;
+    const desktop = window.matchMedia("(min-width: 901px)");
+    const close = () => setMenu(false);
+    const outside = (event: PointerEvent) => {
+      if (!header.current?.contains(event.target as Node)) close();
+    };
+    document.addEventListener("pointerdown", outside);
+    desktop.addEventListener("change", close);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      desktop.removeEventListener("change", close);
+    };
+  }, [menu]);
   const items = searchItems.filter((item) =>
     `${item.title} ${item.description}`
       .toLowerCase()
@@ -54,7 +69,14 @@ export function Navigation() {
   );
   return (
     <>
-      <header className="site-header">
+      <header
+        className="site-header"
+        ref={header}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget))
+            setMenu(false);
+        }}
+      >
         <div className="container header-inner">
           <Link
             href="/"
