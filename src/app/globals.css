@@ -64,6 +64,10 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 110px;
+  scrollbar-gutter: stable;
+}
+html:has(.search-dialog[open]) {
+  overflow: hidden;
 }
 body {
   isolation: isolate;
