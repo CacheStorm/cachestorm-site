@@ -66,7 +66,12 @@ export default function Benchmarks() {
               In-memory store benchmarks. No TCP connection, protocol parsing or
               network round trip.
             </p>
-            <div className="table-scroll">
+            <div
+              className="table-scroll"
+              role="region"
+              aria-label="Direct storage benchmark results"
+              tabIndex={0}
+            >
               <table className="benchmark-table">
                 <thead>
                   <tr>
@@ -96,7 +101,12 @@ export default function Benchmarks() {
               results describe a different measurement from direct storage
               calls.
             </p>
-            <div className="table-scroll">
+            <div
+              className="table-scroll"
+              role="region"
+              aria-label="End-to-end TCP benchmark results"
+              tabIndex={0}
+            >
               <table className="benchmark-table">
                 <thead>
                   <tr>

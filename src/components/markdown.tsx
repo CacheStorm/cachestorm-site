@@ -35,7 +35,12 @@ export function Markdown({ children }: { children: string }) {
             <h3 id={anchor(String(children))}>{children}</h3>
           ),
           table: ({ children }) => (
-            <div className="table-scroll">
+            <div
+              className="table-scroll"
+              role="region"
+              aria-label="Documentation table"
+              tabIndex={0}
+            >
               <table>{children}</table>
             </div>
           ),

@@ -7,6 +7,7 @@ const groups = [...new Set(docLinks.map((d) => d.group))];
 export function DocsNavigation() {
   const path = usePathname();
   const router = useRouter();
+  const currentPath = path === "/docs/api/" ? "/docs/http-api/" : path;
   return (
     <>
       <aside className="docs-sidebar" aria-label="Documentation navigation">
@@ -19,9 +20,9 @@ export function DocsNavigation() {
                 <Link
                   href={`/docs/${d.slug}/`}
                   key={d.slug}
-                  className={path === `/docs/${d.slug}/` ? "active" : ""}
+                  className={currentPath === `/docs/${d.slug}/` ? "active" : ""}
                   aria-current={
-                    path === `/docs/${d.slug}/` ? "page" : undefined
+                    currentPath === `/docs/${d.slug}/` ? "page" : undefined
                   }
                 >
                   {d.title}
@@ -32,6 +33,7 @@ export function DocsNavigation() {
         <Link
           href="/docs/commands/"
           className={`docs-command-link ${path === "/docs/commands/" ? "active" : ""}`}
+          aria-current={path === "/docs/commands/" ? "page" : undefined}
         >
           <Terminal size={15} />
           Command reference
@@ -43,9 +45,10 @@ export function DocsNavigation() {
         </label>
         <select
           id="docs-select"
-          value={path}
+          value={currentPath}
           onChange={(e) => router.push(e.target.value)}
         >
+          <option value="/docs/">Documentation overview</option>
           {docLinks.map((d) => (
             <option key={d.slug} value={`/docs/${d.slug}/`}>
               {d.title}

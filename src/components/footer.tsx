@@ -1,8 +1,5 @@
-"use client";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { useInView } from "motion/react";
-import { useEffect, useRef } from "react";
 import { Logo, OxogMark } from "./brand";
 import { REPO, SOURCE, VERSION } from "@/lib/site";
 const columns = [
@@ -35,19 +32,6 @@ const columns = [
   },
 ];
 export function Footer() {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const visible = useInView(ref);
-  useEffect(() => {
-    const studio = ref.current;
-    if (!studio) return;
-    const syncVisibility = () => {
-      studio.dataset.pageVisible = String(!document.hidden);
-    };
-    syncVisibility();
-    document.addEventListener("visibilitychange", syncVisibility);
-    return () =>
-      document.removeEventListener("visibilitychange", syncVisibility);
-  }, []);
   return (
     <footer className="site-footer">
       <div className="container">
@@ -82,12 +66,7 @@ export function Footer() {
             ))}
           </div>
         </div>
-        <a
-          className="studio"
-          href="https://oxog.net"
-          ref={ref}
-          data-visible={visible}
-        >
+        <a className="studio" href="https://oxog.net">
           <OxogMark />
           <div>
             <span className="eyebrow">PART OF A BIGGER PICTURE</span>

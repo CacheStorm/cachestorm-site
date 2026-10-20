@@ -1,13 +1,17 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { bindDecorativeMotion } from "@/lib/decorative-motion";
 import { bindSiteBackground } from "@/lib/site-background";
 
 export function SiteBackground() {
+  const pathname = usePathname();
   const ref = useRef<SVGSVGElement>(null);
   const interaction = useRef<SVGSVGElement>(null);
   const id = useId().replace(/:/g, "");
   useEffect(() => bindSiteBackground(ref.current, interaction.current), []);
+  useEffect(() => bindDecorativeMotion(), [pathname]);
   return (
     <>
       <svg

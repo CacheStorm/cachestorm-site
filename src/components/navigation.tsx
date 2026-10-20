@@ -21,8 +21,12 @@ export function Navigation() {
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const searchTrigger = useRef<HTMLButtonElement>(null);
+  const searchReturnTarget = useRef<HTMLElement | null>(null);
   const path = usePathname();
   const openSearch = useCallback(() => {
+    if (dialog.current?.open) return;
+    searchReturnTarget.current = document.activeElement as HTMLElement;
     setMenu(false);
     setQuery("");
     dialog.current?.showModal();
@@ -81,6 +85,8 @@ export function Navigation() {
               className="search-trigger"
               type="button"
               aria-label="Search documentation"
+              ref={searchTrigger}
+              aria-haspopup="dialog"
               onClick={openSearch}
             >
               <Search size={18} />
@@ -138,6 +144,12 @@ export function Navigation() {
         ref={dialog}
         className="search-dialog"
         aria-label="Search documentation"
+        onClose={() => {
+          const previous = searchReturnTarget.current;
+          if (previous?.isConnected && previous.getClientRects().length)
+            previous.focus();
+          else searchTrigger.current?.focus();
+        }}
         onClick={(e) => {
           if (e.target === e.currentTarget) dialog.current?.close();
         }}
@@ -174,6 +186,9 @@ export function Navigation() {
             </button>
           </div>
           <div className="search-results">
+            <p className="sr-only" role="status">
+              {items.length} {items.length === 1 ? "page" : "pages"} found.
+            </p>
             {items.length ? (
               items.map((item) => (
                 <Link

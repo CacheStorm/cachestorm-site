@@ -58,6 +58,11 @@
     color-mix(in srgb, #071a3d 24%, transparent);
   animation: theme-panel-in 0.18s ease-out;
   transform-origin: top right;
+  max-height: calc(
+    100dvh - var(--header-height) - 32px - env(safe-area-inset-bottom, 0px)
+  );
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .theme-panel-heading {
   display: flex;
